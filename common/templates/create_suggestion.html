@@ -1,0 +1,32 @@
+{%extends "base.html" %}
+
+{% block content %}
+	<div class="span12" >
+		{% if form.errors %}
+			<div class="alert alert-block">
+			  <a class="close" data-dismiss="alert">×</a>
+			  <h4 class="alert-heading">Error</h4>
+		  		Debes escribir algo ;)
+			</div>
+		{% endif %}
+		{% if thanks %}
+			<div class="alert alert-success">
+				<a class="close" data-dismiss="alert">×</a>
+			  	La sugerencia fue guardada!
+			</div>
+		{% endif %}
+		<h3>
+			Escribe aquí tu sugerencia y presiona el botón guardar
+		</h3>
+		<p>
+			Las sugerencias son enviadas de forma anónima a los Gerentes y a la Comandancia, para sugerencias/problemas sobre el sistema escribir un correo detallado a <a href="mailto:smoncada@bomberos.usb.ve">smoncada@bomberos.usb.ve</a>
+		</p>
+		<form method="post" action="{% url create_suggestion %}" class="well">
+			{% csrf_token %}
+			<label>{{form.text.label}}</label>
+			{{form.text}}
+			<button type="submit" class="btn">Guardar</button>
+		</form>
+
+	</div>
+{% endblock %}

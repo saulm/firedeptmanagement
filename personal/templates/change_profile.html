@@ -1,0 +1,50 @@
+{%extends "base.html" %}
+
+{%block content%}
+	<h3>Perfil</h3>
+	<div class="row">
+		<form method="post"  class="well" enctype="multipart/form-data" action="{%url change_profile%}">
+				{% csrf_token %}
+				{%for field in profile_form.hidden_fields%}
+					{{field}}
+				{%endfor%}
+				{%for field in profile_form.visible_fields%}
+					<label>{{field.label}}</label>
+					{{field}}
+				{%endfor%}
+				<button type="submit" class="btn">Guardar</button>
+			</form>
+	</div>
+	
+	<h3>Telefonos</h3>
+	
+	{% for form in bound_forms %}
+		<div class="span3">
+			<form method="post"  class="well"  action="{%url change_phone%}">
+				{% csrf_token %}
+				{%for field in form.hidden_fields%}
+					{{field}}
+				{%endfor%}
+				{%for field in form.visible_fields%}
+					<label>{{field.label}}</label>
+					{{field}}
+				{%endfor%}
+				<button type="submit" class="btn">Guardar</button>
+				<a class="btn btn-danger" href="{% url delete_phone form.id.value %}"><i class="icon-trash icon-white"></i> Borrar</a>
+			</form>
+		</div>
+	{%endfor%}
+	<div class="span3">
+		<form method="post"  class="well" action="{%url change_phone%}">
+			{% csrf_token %}
+			{%for field in new_form.hidden_fields%}
+				{{field}}
+			{%endfor%}
+			{%for field in new_form.visible_fields%}
+				<label>{{field.label}}</label>
+				{{field}}
+			{%endfor%}
+			<button type="submit" class="btn">Guardar</button>
+		</form>
+	</div>
+{%endblock%}

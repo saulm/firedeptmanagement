@@ -1,0 +1,84 @@
+{%extends "base.html" %}
+{% load thumbnail %}
+			{% block top_menu%}
+			{% endblock %}	
+	
+	{% block content %}
+	<form method="get" class ="well form-search">
+			<input type="text" name="query" class="input-large search-query" value="{{query}}"/>		
+			<input type="submit" value="Buscar" class="bnt"/>
+	</form>
+	<div class="row">
+		<h2>Bomberos</h2>
+		<table class="table table-striped">
+  			 <thead>
+			    <tr>
+			    	<th>Foto</th>
+			      	<th>Nombre</th>
+			      	<th>Contacto</th>
+			      	<th>Acciones</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			  	{%for ff in Firefighter%}
+			  		<tr>
+				      	<td>
+				      		{%if ff.picture%}
+								{% thumbnail ff.picture "70x70" crop="center" format="PNG"   as im %}
+									<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
+								{% endthumbnail %}
+							{%endif%}
+				      	</td>
+				      	<td>{{ff}}</td>
+				      	<td>
+				      		<ul class="unstyled">
+								<li>
+									{%for phone in ff.persontelephonenumber_set.all %}
+										{{phone}}
+									{%endfor%}
+								</li>
+								<li>Email: {{ff.primary_email}}</li>
+								<li>Email: {{ff.alternate_email}}</li>
+							</ul>
+				      	</td>
+				      	<td><a href="{% url perfil_f ff_id=ff.id %}">Ver perfil</a></td>
+				      	
+				    </tr>
+			  	{%endfor%}
+			  </tbody>
+		</table>
+	</div>
+	
+	<div class="row">
+		<h2>Empresas/Dependencias USB</h2>
+		<table class="table table-striped">
+  			 <thead>
+			    <tr>
+			      <th>Nombre</th>
+			      <th>Contacto</th>
+			      <th>Acciones</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			  	{%for company in RelationalCompany %}
+			  		<tr>
+				      	<td>{{company}}</td>
+				      	<td>
+				      		<ul class="unstyled">
+								<li>
+									{%for phone in company.companytelephonenumber_set.all %}
+										{{phone}}
+									{%endfor%}
+								</li>
+								<li>Email: {{company.email}}</li>
+							</ul>
+						</td>
+				      	<td></td>
+				    </tr>	
+			  	{%endfor%}
+			    
+			  </tbody>
+		</table>
+	</div>
+	
+{% endblock %}

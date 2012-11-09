@@ -1,0 +1,45 @@
+{%extends "base.html" %}
+{% block content %}
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Fecha</th>
+				<th>Hora</th>
+				<th>Tipo</th>
+				<th>Descripción</th>
+			</tr>
+		</thead>
+		<tbody>
+			{%for service in services%}
+				<tr>
+					<td>{{service.id}}</td>
+					<td>{{service.date}}</td>
+					<td>{{service.time}}</td>
+					<td>{{service.service_type}}</td>
+					<td>{{service.description}}</td>
+				</tr>	
+			{%endfor%}
+		</tbody>
+	</table>
+	<div class="pagination">
+		<ul>
+			
+        	<li class="{% if not services.has_previous %}disabled{% endif %}">
+        		<a href="{% if services.has_previous %}?page={{ services.previous_page_number }}{%endif%}">Anterior</a>
+        	</li>
+        	
+			{%for page in paginator.page_range%}
+				<li class="{% if services.number == page %}active{%endif%}"><a href="?page={{ page }}">{{page}}</a></li>
+			{%endfor%}
+			
+			<li class="{% if not services.has_next %}disabled{% endif %}">
+        		<a href="{% if services.has_next %}?page={{ services.next_page_number }}{%endif%}">Siguiente</a>
+        	</li>
+		</ul>
+	</div>
+{%endblock%}
+
+{% block scripts%}
+ 	{{block.super}}
+{%endblock%}

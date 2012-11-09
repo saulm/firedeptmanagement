@@ -1,0 +1,13 @@
+*.pyc
+.project
+.pydevproject
+.settings
+*~
+xapian_index/
+whosh_index/
+sqlite.db
+local_settings.py
+static/
+local_settings_prod.py
+gestion.wsgi
+

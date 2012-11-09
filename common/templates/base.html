@@ -1,0 +1,143 @@
+<!doctype html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!-- Consider adding a manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+ 	<meta charset="utf-8">
+  	<!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/i/378 -->
+  	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title>Sistema de Gestión CBVUSB</title>
+    <!-- Mobile viewport optimized: h5bp.com/viewport -->
+ 	<meta name="viewport" content="width=device-width">
+
+	<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="{{STATIC_URL}}css/style.css" type="text/css" media="screen" />
+	<link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/base/jquery-ui.css" type="text/css" />
+  	{% block extrahead %}{{ block.super }}
+		{{ media }}
+	{% endblock %}
+  	<!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
+
+  	<!-- All JavaScript at the bottom, except this Modernizr build.
+   	Modernizr enables HTML5 elements & feature detects for optimal performance.
+   	Create your own custom Modernizr build: www.modernizr.com/download/ -->
+<!--   	<script src="js/libs/modernizr-2.5.3.min.js"></script> -->
+</head>
+<body>
+	{% block header%}
+	  <header>
+		<div class="container">
+			<div class="row header">
+				<div class="span2">
+					<a href="{% url base%}" title="Regresar al inicio" id="logo">
+		  				<img src="{{STATIC_URL}}img/logo_top.gif" alt="Logo CBVUSB" width="170px" />
+					</a>
+				</div>
+		  		<div class="span10">
+		  			<hgroup id="site_header">
+						<h1>Cuerpo de Bomberos Voluntarios</h1>
+						<h2>UNIVERSIDAD SIMÓN BOLÍVAR</h2>
+						<h3>Disciplina - Estudio - Excelencia</h3>
+					</hgroup>	
+		  		</div>
+			</div>
+		</div>
+		</header>
+	{%endblock%}
+	<nav>
+  	<div class="navbar ">
+  		<div class="navbar-inner">
+    		<div class="container">
+      			<ul class="nav">
+					<li class="active"><a href="{% url base%}">Inicio</a></li>
+					<li><a href="{% url perfil %}">Mi Perfil</a></li>   		
+					<li><a href="{% url directorio %}">Directorio</a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Operaciones<b class="caret"></b></a>
+					   	<ul class="dropdown-menu">
+							<li><a href="{% url insert_service %}">Insertar Servicio</a></li>
+							<li><a href="{% url list_services %}">Ver Servicios</a></li>	
+					    </ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Cuenta<b class="caret"></b></a>
+					   	<ul class="dropdown-menu">
+					      	<li><a href="{% url change_profile %}">Cambiar Mis Datos</a></li>
+					      	<li><a href="{% url create_suggestion %}">Sugerencias</a></li>
+					      	<li><a href="{% url logout %}">Salir</a></li>
+					    </ul>
+					</li>
+				</ul>
+    		</div>
+  		</div>
+	</div>
+  </nav>
+	<div role="main" class="container">
+  	<div class="row">
+
+  		<div class="span12" id="main_container">
+  			
+  				{% if messages %}
+				<div class="row">					
+					    {% for message in messages %}
+						    <div class="alert alert-{{ message.tags }}">
+							  <a class="close" data-dismiss="alert">×</a>
+							  <h4 class="alert-heading"></h4>
+							  	{{ message }}
+							</div>
+					    {% endfor %}
+				</div>
+				{% endif %}
+  			<div class="row">
+	  			{% block content %}
+				{% endblock %}
+			</div>
+  		</div>	
+  	</div>
+</div>
+
+<footer>
+	<div class="container">
+  	<div class="row">
+  		<div class="span12">
+  			{% block footer %}	
+				<p>Copyright (c) 2012 BomberosUSB. Todos los derechos reservados.</p>
+			{%endblock%}
+		</div>
+	</div>
+</div>
+	
+</footer>
+
+ {% block scripts%}
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+	<script src="{{STATIC_URL}}js/libs/jquery.ui.datepicker-es.js"></script>
+	<script charset="utf-8" src="http://widgets.twimg.com/j/2/widget.js"></script>
+	 	  
+	<script src="{{STATIC_URL}}js/libs/plugins.js"></script>
+	<script src="{{STATIC_URL}}js/libs/script.js"></script>
+	<script src="{{STATIC_URL}}js/libs/bootstrap-transition.js"></script>
+	<script src="{{STATIC_URL}}js/libs/bootstrap-carousel.js"></script>
+	<script src="{{STATIC_URL}}js/libs/bootstrap-tab.js"></script>
+	<script src="{{STATIC_URL}}js/libs/bootstrap-collapse.js"></script>     
+	<script src="{{STATIC_URL}}js/libs/bootstrap-dropdown.js"></script>     
+	<script type="text/javascript" src="{{STATIC_URL}}js/libs/bootstrap-alert.js"></script>
+	<script src="{{STATIC_URL}}js/libs/modernizr-2.5.3.min.js"></script>
+	<script type="text/javascript" >
+		$(function() {
+			$( ".datePicker" ).datepicker($.datepicker.regional['es']);
+			$('.dropdown-toggle').dropdown();
+		});
+	</script>
+{%endblock%}
+        
+
+</body>
+	</html>

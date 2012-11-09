@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title></title>
+		<style type="text/css">
+			.form_text {
+				font-family: Arial;
+				font-size: 2em;
+			}
+			
+			body
+			{
+			background:url(/static/images/planilla_cnb.jpg) no-repeat ;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div style="position: absolute;top: 280px;left: 150px;" class="form_text">{{ff.first_name}}&nbsp;{{ff.first_name_2|default_if_none:""}}</div>
+		<div style="position: absolute;top: 340px;left: 150px;" class="form_text">{{ff.last_name}}&nbsp; {{ff.last_name_2|default_if_none:""}}</div>
+		<div style="position: absolute;top: 400px;left: 300px;" class="form_text">{{ff.id_document}}</div>
+		<div style="position: absolute;top: 600px;left: 830px;" class="form_text">{{ff.blood_type}}Rh{{ff.blood_type_rh}}</div>
+		<div style="position: absolute;top: 680px;left: 300px;" class="form_text">{{ff.addresses.all.0.city}}</div>
+		<div style="position: absolute;top: 720px;left: 50px;width: 800px;" class="form_text">{{ff.addresses.all.0.location}}</div>
+		<div style="position: absolute;top: 840px;left:300px;" class="form_text">
+			{%for phone in ff.persontelephonenumber_set.all %}
+				{{phone}}
+			{%endfor%}
+		</div>
+		<div style="position: absolute;top: 880px;left:250px;" class="form_text">
+			{{ff.primary_email}}<br />
+			{{ff.alternate_email}}
+		</div>
+		<div style="position: absolute;top: 1040px;left: 150px;" class="form_text">{{ff.gender}}</div>
+		
+		
+		<div style="position: absolute;top:10px;left:990px;">.</div>
+		<div style="position: absolute;top:1220px;left:990px;">.</div>
+		{%if ff.picture%}<img width="200px" height="270px" style="position: absolute;top:300px;left:760px;"  src='{{ff.picture.url}}'></img>{%endif%}
+	</body>
+</html>

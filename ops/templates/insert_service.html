@@ -1,0 +1,68 @@
+{%extends "base.html" %}
+{% load bootstrap_toolkit %}
+{% block content %}
+	<div style="margin-bottom: 20px;">
+		
+		<ul class="nav nav-tabs">
+  			<li class="active"><a class="tabs_nav" href="#basic" data-toggle="pill">1) Datos Básicos</a></li>
+  			<li><a id="vehicles_a" class="tabs_nav" href="#vehicles" data-toggle="pill">2) Comisiones</a></li>
+  			<li><a id="patients_a" class="tabs_nav" href="#patients" data-toggle="pill">3) Afectados</a></li>
+  			
+		</ul>
+		
+		<form class="form-horizontal" method="post">
+			{% csrf_token %}
+			<div class="tab-content">
+				<div  class="tab-pane active" id="basic">
+					{{form|as_bootstrap}}
+					<a onclick="$('#vehicles_a').click();" class="btn btn-primary" style="float: right;">Continuar al paso 2 - Comisiones</a>
+				</div>
+		    	
+		    	<div class="tab-pane" id="vehicles">
+		    		{{ vehicles.management_form }}
+		    		{%for vehicle_form in vehicles %}
+		    			<div id="vehicle_{{vehicle_form.prefix}}" class="vehicle_form well" {%if not forloop.first and not vehicle_form.errors %}style="display: none;"{%endif%}>
+		    				{%if not forloop.first%}<a class="btn btn-danger delete_vehicle" style="float: right;">Eliminar</a>{%endif%}
+		    				{{vehicle_form|as_bootstrap}}
+		    				<ul class="crew_group">
+		    					
+		    				</ul>
+		    			</div>
+		    		{%endfor%}
+		    		
+		    		<div class="actions" style="margin-top: 20px;">
+		    			<a onclick="$('#patients_a').click();" class="btn btn-primary" style="float: right;" >Continuar al paso 3 - Afectados</a>
+			        	<a id="add_vehicle" class="btn" style="float: right;margin-right: 10px;">Agregar Comisión</a>
+			    	</div>		
+		    	</div>
+		    	
+		    	<div class="tab-pane" id="patients">
+		    		{{ affected.management_form }}
+		    		{%for affected_form in affected%}
+		    			<div class="patient_form well" {%if not affected_form.errors %}style="display: none;"{%endif%}>
+		    				<a class="btn btn-danger delete_patient" style="float: right;">Eliminar</a>
+		    				{{affected_form|as_bootstrap}}
+		    			</div>
+		    		{%endfor%}
+		    		<div class="actions" style="margin-top: 20px;">
+		    			<button type="submit" class="btn btn-primary" style="float: right;">Guardar Servicio</button>
+		    			<a id="add_patient" class="btn" style="float: right;margin-right: 10px;">Agregar Afectado</a>
+		    		</div>		
+		    	</div>
+	    	</div>
+		</form>
+	</div> 
+{% endblock %}
+
+ {% block scripts%}
+ 	{{block.super}}
+	<script src="{{STATIC_URL}}js/libs/jquery.maskedinput-1.3.min.js"></script>
+	<script src="{{STATIC_URL}}js/ops/insert_service.js"></script>
+	<script type="text/javascript" >
+		$(document).ready(insert_service_ready(
+			{
+				'static_url': '{{STATIC_URL}}'
+			}
+		));	
+	</script>
+{%endblock%}
