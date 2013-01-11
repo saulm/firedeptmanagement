@@ -20,15 +20,17 @@
 		    	
 		    	<div class="tab-pane" id="vehicles">
 		    		{{ vehicles.management_form }}
-		    		{%for vehicle_form in vehicles %}
-		    			<div id="vehicle_{{vehicle_form.prefix}}" class="vehicle_form well" {%if not forloop.first and not vehicle_form.errors %}style="display: none;"{%endif%}>
-		    				{%if not forloop.first%}<a class="btn btn-danger delete_vehicle" style="float: right;">Eliminar</a>{%endif%}
-		    				{{vehicle_form|as_bootstrap}}
-		    				<ul class="crew_group">
-		    					
-		    				</ul>
-		    			</div>
-		    		{%endfor%}
+		    		<div id="vehicles_forms">
+			    		{%for vehicle_form in vehicles %}
+			    			<div id="vehicle_{{vehicle_form.prefix}}" class="vehicle_form well" {%if forloop.first%}index="0"{%endif%}>
+			    				{%if not forloop.first%}<a class="btn btn-danger delete_vehicle" style="float: right;">Eliminar</a>{%endif%}
+			    				{{vehicle_form|as_bootstrap}}
+			    				<ul class="crew_group">
+			    					
+			    				</ul>
+			    			</div>
+			    		{%endfor%}
+		    		</div>
 		    		
 		    		<div class="actions" style="margin-top: 20px;">
 		    			<a onclick="$('#patients_a').click();" class="btn btn-primary" style="float: right;" >Continuar al paso 3 - Afectados</a>
@@ -38,16 +40,18 @@
 		    	
 		    	<div class="tab-pane" id="patients">
 		    		{{ affected.management_form }}
-		    		{%for affected_form in affected%}
-		    			<div class="patient_form well" {%if not affected_form.errors %}style="display: none;"{%endif%}>
-		    				<a class="btn btn-danger delete_patient" style="float: right;">Eliminar</a>
-		    				{{affected_form|as_bootstrap}}
-		    			</div>
-		    		{%endfor%}
+		    		<div id="patients_forms">
+			    		{%for affected_form in affected%}
+			    			<div class="patient_form well">
+			    				<a class="btn btn-danger delete_patient" style="float: right;">Eliminar</a>
+			    				{{affected_form|as_bootstrap}}
+			    			</div>
+			    		{%endfor%}
+			    	</div>
 		    		<div class="actions" style="margin-top: 20px;">
 		    			<button type="submit" class="btn btn-primary" style="float: right;">Guardar Servicio</button>
 		    			<a id="add_patient" class="btn" style="float: right;margin-right: 10px;">Agregar Afectado</a>
-		    		</div>		
+		    		</div>
 		    	</div>
 	    	</div>
 		</form>
@@ -61,7 +65,10 @@
 	<script type="text/javascript" >
 		$(document).ready(insert_service_ready(
 			{
-				'static_url': '{{STATIC_URL}}'
+				'static_url': '{{STATIC_URL}}',
+				'default_affected_form':'{{affected.empty_form|as_bootstrap|escapejs}}',
+				'default_vehicle_form':'{{vehicles.empty_form|as_bootstrap|escapejs}}',
+				'crew_data':'{{crew_data|escapejs}}'
 			}
 		));	
 	</script>

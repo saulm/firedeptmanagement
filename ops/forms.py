@@ -34,7 +34,7 @@ class ServiceForm(ModelForm):
 
 
 class ServiceVehicleForm(forms.Form):
-    lead_select = forms.CharField(label=u'Jefe de Comisión')
+    lead_select = forms.CharField(label=u'Jefe de Comisión', required=True)
     vehicle = forms.ModelChoiceField(queryset=Vehicle.objects.all(),
                                      label="Unidad",
                                      help_text=u"No selecciones nada si la comisión fue sin unidad",

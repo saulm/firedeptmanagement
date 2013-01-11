@@ -8,7 +8,7 @@ from personal.models import Firefighter
 from common.models import BasePerson, TelephoneNumber, PersonTelephoneNumber
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
+import simplejson
 
 @login_required
 def list_services(request):
@@ -28,17 +28,20 @@ def list_services(request):
 @login_required
 def insert_service(request):
     params = {}
-    affected_formset = formset_factory(AffectedForm, extra=10)
-    vehicles_formset = formset_factory(ServiceVehicleForm, extra=5)
+    AffectedFormSet = formset_factory(AffectedForm, extra=0)
+    VehiclesFormSet = formset_factory(ServiceVehicleForm, extra=1)
     firefighter = request.user.get_profile()
     service_form = ServiceForm()
+    crew_dict = {}
 
     if request.method == 'POST':
         data = request.POST.copy()
+        data['time'] = data['time'][0:-2]+":"+data['time'][-2:]
+        
         service_form = ServiceForm(data)
-        affected_formset = affected_formset(data)
-        vehicles_formset = vehicles_formset(data)
-
+        affected_formset = AffectedFormSet(data, prefix='affected')
+        vehicles_formset = VehiclesFormSet(data, prefix='vehicles')
+#        import ipdb;ipdb.set_trace()
         if service_form.is_valid() and affected_formset.is_valid() and vehicles_formset.is_valid():
             service = service_form.save()
             service.created_by = firefighter
@@ -86,11 +89,26 @@ def insert_service(request):
                     service.affected.add(s_affected)
             messages.success(request, u'El servicio fue guardado exitosamente')
             return redirect(list_services)
+        else:
+            crew_ids_str = ""
+            for k, v in data.iteritems():
+                if "crew_ids" in k and v!="":
+                    crew_ids_str = crew_ids_str+","+v
+            crew_ids = [x for x in crew_ids_str.split(",") if x!='']
 
+#            import ipdb;ipdb.set_trace()
+            crew = Firefighter.objects.filter(id__in=crew_ids)
+            for member in crew:
+                crew_dict[member.id] = str(member)
+    else:
+        affected_formset = AffectedFormSet(prefix='affected')
+        vehicles_formset = VehiclesFormSet(prefix='vehicles')
+        
     params['form'] = service_form
     params['affected'] = affected_formset
-    params['vehicles'] = vehicles_formset
+    params['vehicles'] =  vehicles_formset
     params['media'] = service_form.media
     params['ff'] = firefighter
+    params['crew_data'] = simplejson.dumps(crew_dict)
 
     return render_to_response("insert_service.html", RequestContext(request, params))

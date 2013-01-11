@@ -13,16 +13,6 @@ function get_used_ids(){
 	return ids;
 }
 
-function update_crew_list(id){
-	var $form = $("div#"+id);
-	var lis = $("div#"+id+" li");
-	var ids = new Array();
-	$.each(lis, function(index, Element){
-		ids.push($(Element).attr("member_id"));
-	});
-	$form.find("input[name$='crew_ids']").attr("value", ids.join());
-}
-
 function fill_patient_form($form, data){
 	$form.find("input[name$='first_name']").val(data.first_name);
 	$form.find("input[name$='first_name_2']").val(data.first_name_2);
@@ -32,37 +22,16 @@ function fill_patient_form($form, data){
 	$form.find("input[name$='primary_email']").val(data.primary_email);
 }
 
-function insert_service_ready(settings){
+function set_vehicle_form_behavior(settings){
 	var static_url = settings["static_url"];
 	
-	//TODO: Revisar porque no sirve
-	$("input.datePicker").datepicker("option", "maxDate", 0);
-	
-	$("input#id_time").mask("9999");
-	
-	$('tabs_nav').click(function (e) {
-  		e.preventDefault();
-  		$(this).tab('show');
-	});
-		
-	$("a.delete_patient").click(function(){
-		$(this).parent().hide();
-		$(this).parent().find("input, select").val("");
-	});
 	
 	$("a.delete_vehicle").click(function(){
-		$(this).parent().hide();
-		$(this).parent().find("input, select").val("");
+		$(this).parent().remove();
+		var total_forms = parseInt($("div#vehicles_forms input#id_form-TOTAL_FORMS").val()) - 1;
+		$("div#vehicles_forms input#id_form-TOTAL_FORMS").val(total_forms);
 	});
 	
-	$("a#add_patient").click(function(){
-		$("h3#nopatients").hide();
-		$(".patient_form:hidden").filter(":first").show();
-	});
-	
-	$("a#add_vehicle").click(function(){
-		$(".vehicle_form:hidden").filter(":first").show();
-	});
 	
 	$("input[name$='driver_select']").each(function(index, Element){
 		$(Element).closest(".control-group").hide();
@@ -79,38 +48,6 @@ function insert_service_ready(settings){
 		} else {
 			$driver_select_group.show();
 		}
-	});
-	
-	//Autocomplete Cedula
-	$("input[name$='id_document']").autocomplete({
-		source: function( request, response ) {
-			$.ajax({
-				url: "/gestion/personas/autocompletar/",
-				dataType: "json",
-				data: {
-					term: request.term
-				},
-				success: function( data ) {
-					response( $.map( data, function( item ) {
-						return {
-							label: item.fields.first_name +" "+item.fields.last_name,
-							value: item.fields.id_document,
-							first_name: item.fields.first_name,
-							first_name_2: item.fields.first_name_2,
-							last_name: item.fields.last_name,
-							last_name_2: item.fields.last_name_2,
-							gender : item.fields.gender,
-							primary_email : item.fields.primary_email
-						}
-					}));
-				}
-			});
-		},
-		minLength: 3,
-		select: function( event, ui ) {
-				$form = $(event.target).closest(".patient_form");
-				fill_patient_form($form, ui.item);
-			}
 	});
 	
 	//Autocomplete jefe comision
@@ -214,5 +151,147 @@ function insert_service_ready(settings){
 				return false;
 			}
 	});
+}
+
+function set_affected_form_behavior(){
+	$("a.delete_patient").click(function(){
+			$(this).parent().remove();
+			var total_forms = parseInt($("div#patients_forms input#id_form-TOTAL_FORMS").val()) - 1;
+			$("div#patients_forms input#id_form-TOTAL_FORMS").val(total_forms);
+		});
 		
+		//Autocomplete Cedula
+		$("input[name$='id_document']").autocomplete({
+			source: function( request, response ) {
+				$.ajax({
+					url: "/gestion/personas/autocompletar/",
+					dataType: "json",
+					data: {
+						term: request.term
+					},
+					success: function( data ) {
+						response( $.map( data, function( item ) {
+							return {
+								label: item.fields.first_name +" "+item.fields.last_name,
+								value: item.fields.id_document,
+								first_name: item.fields.first_name,
+								first_name_2: item.fields.first_name_2,
+								last_name: item.fields.last_name,
+								last_name_2: item.fields.last_name_2,
+								gender : item.fields.gender,
+								primary_email : item.fields.primary_email
+							}
+						}));
+					}
+				});
+			},
+			minLength: 3,
+			select: function( event, ui ) {
+					$form = $(event.target).closest(".patient_form");
+					fill_patient_form($form, ui.item);
+			}
+	});
+}
+
+function get_next_index(selector){
+	var index = 0;
+	var indexes = [];
+	$(selector).each(function() {
+		indexes.push(parseInt($(this).attr('index')));
+	});
+
+	if(indexes.length > 0){
+		indexes = indexes.sort( function (a,b) { return b-a });
+		index = indexes[0]+1;
+	}
+	return index;
+}
+
+function set_total_forms(selector){
+	var new_total = parseInt($(selector).val()) + 1;
+	$(selector).val(new_total);
+}
+
+function update_crew_list(id){
+	var $form = $("div#"+id);
+	var lis = $("div#"+id+" li");
+	var ids = new Array();
+	$.each(lis, function(index, Element){
+		ids.push($(Element).attr("member_id"));
+	});
+	$form.find("input[name$='crew_ids']").attr("value", ids.join());
+}
+
+function fill_crews(settings){
+	var static_url = settings["static_url"];
+	var crew_data = jQuery.parseJSON(settings["crew_data"]);
+	
+	$("div.vehicle_form").each(function(){ 
+		var $form = $(this);
+		
+		var ids = $form.children().filter("input[name$='crew_ids']").val().split(",");
+		$.each(ids, function(index, Element){
+			var id = parseInt(Element);
+			var label = crew_data[id];
+			if (label != undefined){
+				var content = "<li class='member_li' member_id="+id+">"+label+
+								" <a onclick='$(this).parent().remove();update_crew_list(\""+
+								$form.attr("id")+"\");'><img src='"+
+								static_url+"img/remove_icon.png'></img></a></li>";
+				$form.find("ul.crew_group").append(content);	
+			}
+							
+		});
+		
+		var vehicles = $form.find("select[name$='vehicle']");
+		$.each(vehicles, function(index, vehicle){
+			if ($(this).val()!=""){
+				var $driver_select =  $form.find("input[name$='driver_select']");
+				var $driver_select_group = $driver_select.closest(".control-group");
+				$driver_select_group.show();
+			}
+		});
+	});
+}
+
+function insert_service_ready(settings){
+	var static_url = settings["static_url"];
+	var crew_data = jQuery.parseJSON(settings["crew_data"]);
+	var default_affected_form = settings["default_affected_form"];
+	var default_vehicle_form = settings["default_vehicle_form"];
+	
+	$("input.datePicker").datepicker({"maxDate": 0});
+	$("input#id_time").mask("9999");
+	
+	$('tabs_nav').click(function (e) {
+  		e.preventDefault();
+  		$(this).tab('show');
+	});
+	
+	set_vehicle_form_behavior(settings);
+	set_affected_form_behavior();
+	fill_crews(settings);
+	
+	$("a#add_patient").click(function(){
+		var index = get_next_index("div.patient_form");
+		var form = default_affected_form.replace(/__prefix__/g, index);
+		
+		set_total_forms("div#patients input#id_affected-TOTAL_FORMS");
+		$("div#patients_forms").append('<div class="patient_form well" index="'+index+
+						'"><a class="btn btn-danger delete_patient" style="float: right;">Eliminar</a>'+
+						form+'</div>');
+		set_affected_form_behavior();
+	});
+	
+	$("a#add_vehicle").click(function(){
+		var index = get_next_index("div.vehicle_form");	
+		var form = default_vehicle_form.replace(/__prefix__/g, index);
+				
+		set_total_forms("div#vehicles input#id_vehicles-TOTAL_FORMS");
+		$("div#vehicles_forms").append('<div id="vehicle_vehicles-'+index+
+						'" class="vehicle_form well" index="'+index+
+						'"><a class="btn btn-danger delete_vehicle" style="float: right;">Eliminar</a>'+
+						form+'<ul class="crew_group"></ul></div>');
+		set_vehicle_form_behavior(settings);
+	});
 }
