@@ -25,7 +25,7 @@ class FirefighterHolidayInline(admin.StackedInline):
     extra = 1
 
 
-class FirefighterAdmin( admin.ModelAdmin):
+class FirefighterAdmin(admin.ModelAdmin):
     list_display = ('last_name', 'first_name', 'number', 'id_document', 'primary_email', 'alternate_email')
     list_display_links = ('number', 'last_name', 'first_name')
     inlines = (PersonDegreeInline, PersonCourseInline, PersonJobInline, PersonAddressInline, PersonTelephoneNumberInline, ConditionChangeInline, RankChangeInline, CondecorationAwardInline, FirefighterHolidayInline)
