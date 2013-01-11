@@ -7,7 +7,6 @@ from django.dispatch import receiver
 from django_auth_ldap.config import _LDAPConfig
 from django_auth_ldap.backend import LDAPSettings
 from utils.passwords import get_pronounceable_password, makeSecret
-from django.core.mail import send_mail
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from sorl.thumbnail import ImageField
@@ -50,7 +49,7 @@ class Firefighter(Person):
     number = models.SmallIntegerField(null=True, blank=True, verbose_name=u'Número de Carnet')
     ranks = models.ManyToManyField(Rank, through="RankChange", null=True, verbose_name=u'Rangos')
     profile_picture = ImageField(upload_to="images/firefighter/", null=True, blank=True, verbose_name='Foto de Perfil')
-
+    
     @classmethod
     def search(cls, text):
         return cls.objects.filter(
@@ -64,7 +63,25 @@ class Firefighter(Person):
                            Q(number__istartswith=text) |
                            Q(primary_email__istartswith=text)
         ).order_by("last_name")
+        
+    def update_ldap_password(self):
+        if not settings.AUTH_LDAP_BIND_PASSWORD:
+            return
+        
+        ldap_c = _LDAPConfig.get_ldap()
+        settings = LDAPSettings()
+        conn = ldap_c.initialize(settings.AUTH_LDAP_SERVER_URI)
+        conn.simple_bind_s(settings.AUTH_LDAP_BIND_DN, settings.AUTH_LDAP_BIND_PASSWORD)
+        
+        for opt, value in settings.AUTH_LDAP_CONNECTION_OPTIONS.iteritems():
+            conn.set_option(opt, value)
 
+        new_password = get_pronounceable_password()
+        
+        mod_attrs = [(ldap_c.MOD_REPLACE, 'userPassword', makeSecret(new_password))]
+        conn.modify_s('cn='+self.user.username+',ou=users,dc=bomberos,dc=usb,dc=ve', mod_attrs)
+
+        settings.send_welcome_email(str(self), self.user.username, new_password, self.alternate_email)
 
 class RankChange(models.Model):
     class Meta:
