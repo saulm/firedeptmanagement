@@ -1,0 +1,82 @@
+{%extends "base.html" %}
+{% load thumbnail %}
+{% block content %}
+	<h2>Servicio #{{service.id}} - {{service.service_type}}</h2>
+	<div class="row" style="margin-bottom: 20px;">
+	  	<div class="span9">Fecha: <strong>{{service.date}} {{service.time}}</strong></div>
+	</div>
+	
+	<div class="row">
+	 	<div class="span8">
+	 		<h3>Descripción:</h3>
+	 		<p>{{service.description}}</p>
+	 	</div>
+	 	<div class="span4">
+	 		<h3>Dirección:</h3>
+	 		<p>{{service.location}}</p>
+	 	</div>
+	</div>
+	
+	<h3>Comisiones:</h3>
+	{% for vehicle in service.vehicles.all %}
+	<div class="service_crew">
+		<div class="row">
+		 	<div class="span9">
+		 		<h4>{{vehicle.vehicle.name}}</h4>
+		 	</div>
+		</div>
+		<h5>Jefe de Comisión:</h5>
+		<div class="row">
+		 	<div class="span1 offset1">
+		 		{%if vehicle.lead.picture%}
+					{% thumbnail vehicle.lead.picture "70x70" crop="center" format="PNG"   as im %}
+						<a href="{% url perfil_f ff_id=vehicle.lead.id %}"><img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img></a>
+					{% endthumbnail %}
+				{%endif%}
+		 	</div>
+		 	<div class="span6">
+		 		<a href="{% url perfil_f ff_id=vehicle.lead.id %}">{{vehicle.lead}}</a>
+		 	</div>
+		 	
+		</div>
+		{%if service.driver%}
+			<h5>Conductor:</h5>
+			<div class="row">
+			 	<div class="span1 offset1">
+			 		{%if vehicle.driver.picture%}
+						{% thumbnail vehicle.driver.picture "70x70" crop="center" format="PNG"   as im %}
+							<a href="{% url perfil_f ff_id=vehicle.driver.id %}"><img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img></a>
+						{% endthumbnail %}
+					{%endif%}
+			 	</div>
+			 	<div class="span6">
+			 		<a href="{% url perfil_f ff_id=vehicle.driver.id %}">{{vehicle.driver}}</a>
+			 	</div>
+			 	
+			</div>
+			
+		{%endif%}
+		<h5>Acompañantes</h5>
+		<div class="row">
+			{%for crew_member in vehicle.crew.all%}
+			 	<div class="span1 offset1">
+			 		{%if crew_member.picture%}
+						{% thumbnail crew_member.picture "70x70" crop="center" format="PNG"   as im %}
+							<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
+						{% endthumbnail %}
+					{%else%}
+						<a href="{% url perfil_f ff_id=crew_member.id %}"><img width="70" height="70"  src="{{STATIC_URL}}img/no_photo_profile.png"/></a>
+					{%endif%}
+			 	</div>
+			 	<div class="span2">
+			 		<a href="{% url perfil_f ff_id=crew_member.id %}">{{crew_member}}</a>
+			 	</div>
+			{% endfor %}
+		</div>
+	</div>			
+	{% endfor %}
+	<div class="row">
+	 	<div class="span4 offset8"><p>Insertado por <a href="{% url perfil_f ff_id=service.created_by.id %}">{{service.created_by}}</a> el {{service.creation_date}}</p></div>
+	</div>
+	
+{% endblock%}
