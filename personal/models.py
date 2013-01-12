@@ -65,15 +65,15 @@ class Firefighter(Person):
         ).order_by("last_name")
         
     def update_ldap_password(self):
-        if not settings.AUTH_LDAP_BIND_PASSWORD:
+        if not django_settings.AUTH_LDAP_BIND_PASSWORD:
             return
         
         ldap_c = _LDAPConfig.get_ldap()
-        settings = LDAPSettings()
-        conn = ldap_c.initialize(settings.AUTH_LDAP_SERVER_URI)
-        conn.simple_bind_s(settings.AUTH_LDAP_BIND_DN, settings.AUTH_LDAP_BIND_PASSWORD)
+        ldap_settings = LDAPSettings()
+        conn = ldap_c.initialize(django_settings.AUTH_LDAP_SERVER_URI)
+        conn.simple_bind_s(django_settings.AUTH_LDAP_BIND_DN, django_settings.AUTH_LDAP_BIND_PASSWORD)
         
-        for opt, value in settings.AUTH_LDAP_CONNECTION_OPTIONS.iteritems():
+        for opt, value in ldap_settings.AUTH_LDAP_CONNECTION_OPTIONS.iteritems():
             conn.set_option(opt, value)
 
         new_password = get_pronounceable_password()
@@ -170,7 +170,7 @@ def join_user_profile(sender, instance, created, **kwargs):
         except:
             pass
 
-if settings.AUTH_LDAP_BIND_PASSWORD:
+if django_settings.AUTH_LDAP_BIND_PASSWORD:
     @receiver(post_save, sender=Firefighter)
     def create_ldap_user(sender, instance, created, **kwargs):
         if not created:
@@ -178,10 +178,10 @@ if settings.AUTH_LDAP_BIND_PASSWORD:
 
         ldap_c = _LDAPConfig.get_ldap()
 
-        settings = LDAPSettings()
+        ldap_settings = LDAPSettings()
         conn = ldap_c.initialize(settings.AUTH_LDAP_SERVER_URI)
-        conn.simple_bind_s(settings.AUTH_LDAP_BIND_DN, settings.AUTH_LDAP_BIND_PASSWORD)
-        for opt, value in settings.AUTH_LDAP_CONNECTION_OPTIONS.iteritems():
+        conn.simple_bind_s(django_settings.AUTH_LDAP_BIND_DN, django_settings.AUTH_LDAP_BIND_PASSWORD)
+        for opt, value in ldap_settings.AUTH_LDAP_CONNECTION_OPTIONS.iteritems():
             conn.set_option(opt, value)
 
         username = instance.first_name[0] + "".join(instance.last_name.split(" "))
