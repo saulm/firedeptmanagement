@@ -1,4 +1,5 @@
 {%extends "base.html" %}
+{% load thumbnail %}
 {% block content %}
 	<table class="table table-striped">
 		<thead>
@@ -8,6 +9,7 @@
 				<th>Hora</th>
 				<th>Tipo</th>
 				<th>Descripción</th>
+				<th>Comisiones</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -18,6 +20,33 @@
 					<td>{{service.time}}</td>
 					<td>{{service.service_type}}</td>
 					<td>{{service.description}}</td>
+					<td>
+						{% for vehicle in service.vehicles.all %}
+							<div>
+								{{vehicle.vehicle.name}}
+								<a href="{% url perfil_f ff_id=vehicle.lead.id %}">
+									{%if vehicle.lead.picture%}
+										{% thumbnail vehicle.lead.picture "35x35" crop="center" format="PNG"   as im %}
+											<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
+										{% endthumbnail %}
+									{%else%}
+										{{lead.initials}}
+									{%endif%}
+								</a>
+								{%for crew_member in vehicle.crew.all%}
+									<a href="{% url perfil_f ff_id=crew_member.id %}">
+										{%if crew_member.picture%}
+											{% thumbnail crew_member.picture "35x35" crop="center" format="PNG"   as im %}
+												<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
+											{% endthumbnail %}
+										{%else%}
+											{{crew_member.initials}}
+										{%endif%}
+									</a>
+								{% endfor %}
+							</div>		
+						{% endfor %}
+					</td>
 				</tr>	
 			{%endfor%}
 		</tbody>
