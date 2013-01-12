@@ -11,6 +11,8 @@ from django.conf import settings as django_settings
 from django.core.exceptions import ValidationError
 from sorl.thumbnail import ImageField
 from django.db.models import Q
+from local_settings import send_welcome_email
+from local_settings import send_webmaster_email
 
 
 class Rank(models.Model):
@@ -81,7 +83,7 @@ class Firefighter(Person):
         mod_attrs = [(ldap_c.MOD_REPLACE, 'userPassword', makeSecret(new_password))]
         conn.modify_s('cn='+username+',ou=users,dc=bomberos,dc=usb,dc=ve', mod_attrs)
 
-        django_settings.send_welcome_email(str(self), username, new_password, self.alternate_email)
+        send_welcome_email(str(self), username, new_password, self.alternate_email)
 
 class RankChange(models.Model):
     class Meta:
@@ -221,8 +223,8 @@ if django_settings.AUTH_LDAP_BIND_PASSWORD:
         except:
             pass
 
-        django_settings.send_welcome_email(str(instance), username, new_password, instance.alternate_email)
-        django_settings.send_webmaster_email(username)
+        send_welcome_email(str(instance), username, new_password, instance.alternate_email)
+        send_webmaster_email(username)
         instance.primary_email = username + "@bomberos.usb.ve"
         instance.save()
 
