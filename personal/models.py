@@ -77,11 +77,11 @@ class Firefighter(Person):
             conn.set_option(opt, value)
 
         new_password = get_pronounceable_password()
-        
+        username = self.primary_email.split("@")[0]
         mod_attrs = [(ldap_c.MOD_REPLACE, 'userPassword', makeSecret(new_password))]
-        conn.modify_s('cn='+self.user.username+',ou=users,dc=bomberos,dc=usb,dc=ve', mod_attrs)
+        conn.modify_s('cn='+username+',ou=users,dc=bomberos,dc=usb,dc=ve', mod_attrs)
 
-        django_settings.send_welcome_email(str(self), self.primary_email.split("@")[0], new_password, self.alternate_email)
+        django_settings.send_welcome_email(str(self), username, new_password, self.alternate_email)
 
 class RankChange(models.Model):
     class Meta:
