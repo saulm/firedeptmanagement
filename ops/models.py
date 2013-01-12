@@ -16,7 +16,6 @@ class Vehicle(models.Model):
     def __unicode__(self):
         return self.name
 
-
 class ServiceAffected(models.Model):
     class Meta:
         verbose_name = "Afectado"

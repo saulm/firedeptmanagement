@@ -7,7 +7,7 @@ from django.dispatch import receiver
 from django_auth_ldap.config import _LDAPConfig
 from django_auth_ldap.backend import LDAPSettings
 from utils.passwords import get_pronounceable_password, makeSecret
-from django.conf import settings
+from django.conf import settings as django_settings
 from django.core.exceptions import ValidationError
 from sorl.thumbnail import ImageField
 from django.db.models import Q
@@ -81,7 +81,7 @@ class Firefighter(Person):
         mod_attrs = [(ldap_c.MOD_REPLACE, 'userPassword', makeSecret(new_password))]
         conn.modify_s('cn='+self.user.username+',ou=users,dc=bomberos,dc=usb,dc=ve', mod_attrs)
 
-        settings.send_welcome_email(str(self), self.user.username, new_password, self.alternate_email)
+        django_settings.send_welcome_email(str(self), self.user.username, new_password, self.alternate_email)
 
 class RankChange(models.Model):
     class Meta:
@@ -221,8 +221,8 @@ if settings.AUTH_LDAP_BIND_PASSWORD:
         except:
             pass
 
-        settings.send_welcome_email(str(instance), username, new_password, instance.alternate_email)
-        settings.send_webmaster_email(username)
+        django_settings.send_welcome_email(str(instance), username, new_password, instance.alternate_email)
+        django_settings.send_webmaster_email(username)
         instance.primary_email = username + "@bomberos.usb.ve"
         instance.save()
 
