@@ -339,3 +339,8 @@ div.required{
 	background-image: url("https://www.lmtclub.com/Modules/customizable/images/requiredIcon_ani.gif");
 	background-repeat: no-repeat;
 }
+
+
+div.service_crew {
+	border:1px solid black;	
+}

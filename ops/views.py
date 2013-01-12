@@ -24,6 +24,10 @@ def list_services(request):
 
     return render_to_response("list_services.html", RequestContext(request, {"services": services, "paginator": paginator}))
 
+@login_required
+def view_service(request, service_id):
+    service = Service.objects.get(id=service_id)
+    return render_to_response("view_service.html", RequestContext(request, {"service": service}))
 
 @login_required
 def insert_service(request):
