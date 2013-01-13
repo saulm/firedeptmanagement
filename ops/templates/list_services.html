@@ -15,9 +15,9 @@
 		<tbody>
 			{%for service in services%}
 				<tr>
-					<td>{{service.id}}</td>
-					<td>{{service.date}}</td>
-					<td>{{service.time}}</td>
+					<td><a href="{% url view_service service_id=service.id%}">{{service.id}}</a></td>
+					<td><a href="{% url view_service service_id=service.id%}">{{service.date|date:"d/n/Y"}}</a></td>
+					<td><a href="{% url view_service service_id=service.id%}">{{service.time|date:"Hi"}}</a></td>
 					<td>{{service.service_type}}</td>
 					<td>{{service.description}}</td>
 					<td>
@@ -52,8 +52,7 @@
 		</tbody>
 	</table>
 	<div class="pagination">
-		<ul>
-			
+		<ul>			
         	<li class="{% if not services.has_previous %}disabled{% endif %}">
         		<a href="{% if services.has_previous %}?page={{ services.previous_page_number }}{%endif%}">Anterior</a>
         	</li>

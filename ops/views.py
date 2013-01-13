@@ -68,7 +68,10 @@ def insert_service(request):
 
             for af in affected_formset.forms:
                 if 'first_name' in af.cleaned_data:
-                    person, _ = BasePerson.objects.get_or_create(id_document=af.cleaned_data["id_document"])
+                    if af.cleaned_data["id_document"]:
+                        person, _ = BasePerson.objects.get_or_create(id_document=af.cleaned_data["id_document"])
+                    else:
+                        person = BasePerson()
                     person.first_name = af.cleaned_data['first_name']
                     person.first_name_2 = af.cleaned_data['first_name_2']
                     person.last_name = af.cleaned_data['last_name']

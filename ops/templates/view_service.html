@@ -3,7 +3,7 @@
 {% block content %}
 	<h2>Servicio #{{service.id}} - {{service.service_type}}</h2>
 	<div class="row" style="margin-bottom: 20px;">
-	  	<div class="span9">Fecha: <strong>{{service.date}} {{service.time}}</strong></div>
+	  	<div class="span9">Fecha: <strong>{{service.date|date:"d/n/Y"}} {{service.time|date:"Hi"}}</strong></div>
 	</div>
 	
 	<div class="row">
@@ -84,13 +84,13 @@
 			
 			
 			<div class="span2">
-				<p>Cédula: {{affected.person_affected.id_document }}</p>
+				<p>Cédula: {{affected.person_affected.id_document|default_if_none:"" }}</p>
 			</div>
 			<div class="span2">
-				<p>Sexo: {{affected.person_affected.get_gender_display }}</p>
+				<p>Sexo: {{affected.person_affected.get_gender_display|default_if_none:"" }}</p>
 			</div>
 			<div class="span3">
-				<p>Email: {{affected.person_affected.primary_email }}</p>
+				<p>Email: {{affected.person_affected.primary_email|default_if_none:"" }}</p>
 			</div>
 			<div class="span5">
 				{% for telephone in affected.person_affected.persontelephonenumber_set.all %}
