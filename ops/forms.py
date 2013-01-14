@@ -52,11 +52,11 @@ class AffectedForm(ModelForm):
     phone_code = forms.CharField(label=u'Código Telefono',
                                  validators=[validators.MaxLengthValidator(4),
                                              validators.RegexValidator(regex="\d\d\d\d")],
-                                 help_text='Ejemplo: 0416 ó 0414 ó 0212')
+                                 help_text='Ejemplo: 0416 ó 0414 ó 0212', required=False)
     phone_number = forms.CharField(label=u'Número Telefono',
                                    validators=[validators.MaxLengthValidator(7),
                                                validators.RegexValidator(regex="\d\d\d\d\d\d\d")],
-                                   help_text='El resto del número Ejemplo: 9063909')
+                                   help_text='El resto del número Ejemplo: 9063909', required=False)
     notes = forms.CharField(label="Notas/Tratamiento", widget=forms.Textarea(),
                             required=False)
     type = forms.CharField(label="Tipo", widget=forms.Select(choices=ServiceAffected.AFFECTED_TYPE_CHOICES))

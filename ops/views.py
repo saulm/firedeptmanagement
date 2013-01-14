@@ -45,7 +45,6 @@ def insert_service(request):
         service_form = ServiceForm(data)
         affected_formset = AffectedFormSet(data, prefix='affected')
         vehicles_formset = VehiclesFormSet(data, prefix='vehicles')
-#        import ipdb;ipdb.set_trace()
         if service_form.is_valid() and affected_formset.is_valid() and vehicles_formset.is_valid():
             service = service_form.save()
             service.created_by = firefighter
@@ -81,13 +80,13 @@ def insert_service(request):
                         person.primary_email = af.cleaned_data["primary_email"]
 
                     person.save()
-
-                    telephone = TelephoneNumber(code=af.cleaned_data["phone_code"],
-                                                number=af.cleaned_data["phone_number"])
-                    telephone.save()
-                    PersonTelephoneNumber(person=person,
-                                          type='O',
-                                          telephone_number=telephone).save()
+                    if af.cleaned_data["phone_code"] and af.cleaned_data["phone_number"]:
+                        telephone = TelephoneNumber(code=af.cleaned_data["phone_code"],
+                                                    number=af.cleaned_data["phone_number"])
+                        telephone.save()
+                        PersonTelephoneNumber(person=person,
+                                              type='O',
+                                              telephone_number=telephone).save()
 
                     s_affected = ServiceAffected(person_affected=person,
                                                  notes=af.cleaned_data["notes"],
