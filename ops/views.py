@@ -84,8 +84,7 @@ def insert_service(request):
                         telephone = TelephoneNumber(code=af.cleaned_data["phone_code"],
                                                     number=af.cleaned_data["phone_number"])
                         telephone.save()
-                        PersonTelephoneNumber(person=person,
-                                              type='O',
+                        PersonTelephoneNumber(person=person,type='O',
                                               telephone_number=telephone).save()
 
                     s_affected = ServiceAffected(person_affected=person,
