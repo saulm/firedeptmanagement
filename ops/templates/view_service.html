@@ -39,7 +39,7 @@
 		 	</div>
 		 	
 		</div>
-		{%if service.driver%}
+		{%if vehicle.driver%}
 			<h5>Conductor:</h5>
 			<div class="row">
 			 	<div class="span1 offset1">
@@ -47,6 +47,8 @@
 						{% thumbnail vehicle.driver.picture "70x70" crop="center" format="PNG"   as im %}
 							<a href="{% url perfil_f ff_id=vehicle.driver.id %}"><img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img></a>
 						{% endthumbnail %}
+					{%else%}
+						<a href="{% url perfil_f ff_id=vehicle.driver.id %}"><img width="70" height="70"  src="{{STATIC_URL}}img/no_photo_profile.png"/></a>
 					{%endif%}
 			 	</div>
 			 	<div class="span6">
