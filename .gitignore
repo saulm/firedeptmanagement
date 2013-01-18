@@ -10,4 +10,5 @@ local_settings.py
 static/
 local_settings_prod.py
 gestion.wsgi
-
+build/
+pip-log.txt
