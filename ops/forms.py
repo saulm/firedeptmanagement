@@ -34,12 +34,13 @@ class ServiceForm(ModelForm):
 
 
 class ServiceVehicleForm(forms.Form):
-    lead_select = forms.CharField(label=u'Jefe de Comisión', required=True)
+    lead_select = forms.CharField(label=u'Jefe de Comisión', required=True,
+                                  help_text=u"Asegurate de Seleccionar el Jefe de la lista que se despliega!")
     vehicle = forms.ModelChoiceField(queryset=Vehicle.objects.all(),
                                      label="Unidad",
                                      help_text=u"No selecciones nada si la comisión fue sin unidad",
                                      required=False)
-    lead = forms.CharField(widget=forms.HiddenInput, required=False)
+    lead = forms.CharField(widget=forms.HiddenInput, required=True)
     driver_select = forms.CharField(label=u'Conductor', required=False)
     driver = forms.CharField(widget=forms.HiddenInput, required=False)
     crew_select = forms.CharField(label=u'Acompañante',

@@ -8,6 +8,7 @@ from personal.models import Firefighter
 from common.models import BasePerson, TelephoneNumber, PersonTelephoneNumber
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db import transaction
 import simplejson
 
 @login_required
@@ -30,6 +31,7 @@ def view_service(request, service_id):
     return render_to_response("view_service.html", RequestContext(request, {"service": service}))
 
 @login_required
+@transaction.commit_on_success
 def insert_service(request):
     params = {}
     AffectedFormSet = formset_factory(AffectedForm, extra=0)

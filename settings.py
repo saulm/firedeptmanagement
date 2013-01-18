@@ -97,7 +97,7 @@ AUTHENTICATION_BACKENDS = (
 
 AUTH_PROFILE_MODULE = "personal.Firefighter"
 THUMBNAIL_DEBUG = True
-
+DEFAULT_CHARSET = 'utf-8'
 
 def send_webmaster_email(username):
     pass
