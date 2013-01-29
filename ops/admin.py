@@ -4,6 +4,7 @@ from ops.models import *
 
 class ServiceVehicleInline(admin.StackedInline):
     model = ServiceVehicle
+    extra = 0
 
 class ServiceAffectedInline(admin.StackedInline):
     model = ServiceAffected
