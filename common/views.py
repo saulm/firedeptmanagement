@@ -1,6 +1,6 @@
 # Create your views here.
 from django.contrib.auth.decorators import login_required
-from django.views.generic.simple import direct_to_template
+from django.shortcuts import render
 from common.models import SuggestionForm
 from django.core.mail import send_mail
 from django.conf import settings
@@ -10,7 +10,7 @@ from django.http import HttpResponse
 
 @login_required
 def base(request):
-    return direct_to_template(request, 'inicio.html')
+    return render(request, 'inicio.html')
 
 
 @login_required
@@ -29,7 +29,7 @@ def create_suggestion(request):
     else:
         form = SuggestionForm()
     data['form'] = form
-    return direct_to_template(request, 'create_suggestion.html', data)
+    return render(request, 'create_suggestion.html', data)
 
 
 @login_required

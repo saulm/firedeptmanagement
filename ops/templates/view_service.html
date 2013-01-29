@@ -30,12 +30,12 @@
 		 	<div class="span1 offset1">
 		 		{%if vehicle.lead.picture%}
 					{% thumbnail vehicle.lead.picture "70x70" crop="center" format="PNG"   as im %}
-						<a href="{% url perfil_f ff_id=vehicle.lead.id %}"><img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img></a>
+						<a href="{% url 'perfil_f' ff_id=vehicle.lead.id %}"><img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img></a>
 					{% endthumbnail %}
 				{%endif%}
 		 	</div>
 		 	<div class="span6">
-		 		<a href="{% url perfil_f ff_id=vehicle.lead.id %}">{{vehicle.lead}}</a>
+		 		<a href="{% url 'perfil_f' ff_id=vehicle.lead.id %}">{{vehicle.lead}}</a>
 		 	</div>
 		 	
 		</div>
@@ -45,14 +45,14 @@
 			 	<div class="span1 offset1">
 			 		{%if vehicle.driver.picture%}
 						{% thumbnail vehicle.driver.picture "70x70" crop="center" format="PNG"   as im %}
-							<a href="{% url perfil_f ff_id=vehicle.driver.id %}"><img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img></a>
+							<a href="{% url 'perfil_f' ff_id=vehicle.driver.id %}"><img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img></a>
 						{% endthumbnail %}
 					{%else%}
-						<a href="{% url perfil_f ff_id=vehicle.driver.id %}"><img width="70" height="70"  src="{{STATIC_URL}}img/no_photo_profile.png"/></a>
+						<a href="{% url 'perfil_f' ff_id=vehicle.driver.id %}"><img width="70" height="70"  src="{{STATIC_URL}}img/no_photo_profile.png"/></a>
 					{%endif%}
 			 	</div>
 			 	<div class="span6">
-			 		<a href="{% url perfil_f ff_id=vehicle.driver.id %}">{{vehicle.driver}}</a>
+			 		<a href="{% url 'perfil_f' ff_id=vehicle.driver.id %}">{{vehicle.driver}}</a>
 			 	</div>
 			 	
 			</div>
@@ -67,11 +67,11 @@
 							<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
 						{% endthumbnail %}
 					{%else%}
-						<a href="{% url perfil_f ff_id=crew_member.id %}"><img width="70" height="70"  src="{{STATIC_URL}}img/no_photo_profile.png"/></a>
+						<a href="{% url 'perfil_f' ff_id=crew_member.id %}"><img width="70" height="70"  src="{{STATIC_URL}}img/no_photo_profile.png"/></a>
 					{%endif%}
 			 	</div>
 			 	<div class="span2">
-			 		<a href="{% url perfil_f ff_id=crew_member.id %}">{{crew_member}}</a>
+			 		<a href="{% url 'perfil_f' ff_id=crew_member.id %}">{{crew_member}}</a>
 			 	</div>
 			{% endfor %}
 		</div>
@@ -111,7 +111,7 @@
 	</div>
 	
 	<div class="row">
-	 	<div class="span4 offset8"><p>Insertado por <a href="{% url perfil_f ff_id=service.created_by.id %}">{{service.created_by}}</a> el {{service.creation_date}}</p></div>
+	 	<div class="span4 offset8"><p>Insertado por <a href="{% url 'perfil_f' ff_id=service.created_by.id %}">{{service.created_by}}</a> el {{service.creation_date}}</p></div>
 	</div>
 	
 {% endblock%}

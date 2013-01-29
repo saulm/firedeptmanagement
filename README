@@ -2,7 +2,4 @@ Para instalar ambiente de desarrollo:
 
 #Requerimientos de python-ldap
 sudo apt-get install libsasl2-dev libldap2-dev
-
-#Instalar django
-
-pip install -E bomberos -r requirements.txt
+pip install -r requirements.txt

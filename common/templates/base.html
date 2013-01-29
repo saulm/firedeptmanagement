@@ -35,7 +35,7 @@
 		<div class="container">
 			<div class="row header">
 				<div class="span2">
-					<a href="{% url base%}" title="Regresar al inicio" id="logo">
+					<a href="{% url 'firedeptmanagement.common.views.base' %}" title="Regresar al inicio" id="logo">
 		  				<img src="{{STATIC_URL}}img/logo_top.gif" alt="Logo CBVUSB" width="170px" />
 					</a>
 				</div>
@@ -55,22 +55,22 @@
   		<div class="navbar-inner">
     		<div class="container">
       			<ul class="nav">
-					<li class="active"><a href="{% url base%}">Inicio</a></li>
-					<li><a href="{% url perfil %}">Mi Perfil</a></li>   		
-					<li><a href="{% url directorio %}">Directorio</a></li>
+					<li class="active"><a href="{% url 'firedeptmanagement.common.views.base' %}">Inicio</a></li>
+					<li><a href="{% url 'perfil' %}">Mi Perfil</a></li>   		
+					<li><a href="{% url 'directorio' %}">Directorio</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Operaciones<b class="caret"></b></a>
 					   	<ul class="dropdown-menu">
-							<li><a href="{% url insert_service %}">Insertar Servicio</a></li>
-							<li><a href="{% url list_services %}">Ver Servicios</a></li>	
+							<li><a href="{% url 'insert_service' %}">Insertar Servicio</a></li>
+							<li><a href="{% url 'list_services' %}">Ver Servicios</a></li>	
 					    </ul>
 					</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Cuenta<b class="caret"></b></a>
 					   	<ul class="dropdown-menu">
-					      	<li><a href="{% url change_profile %}">Cambiar Mis Datos</a></li>
-					      	<li><a href="{% url create_suggestion %}">Sugerencias</a></li>
-					      	<li><a href="{% url logout %}">Salir</a></li>
+					      	<li><a href="{% url 'change_profile' %}">Cambiar Mis Datos</a></li>
+					      	<li><a href="{% url 'create_suggestion' %}">Sugerencias</a></li>
+					      	<li><a href="{% url 'logout' %}">Salir</a></li>
 					    </ul>
 					</li>
 				</ul>

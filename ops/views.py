@@ -9,7 +9,7 @@ from common.models import BasePerson, TelephoneNumber, PersonTelephoneNumber
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import transaction
-import simplejson
+import json
 
 @login_required
 def list_services(request):
@@ -116,6 +116,6 @@ def insert_service(request):
     params['vehicles'] =  vehicles_formset
     params['media'] = service_form.media
     params['ff'] = firefighter
-    params['crew_data'] = simplejson.dumps(crew_dict)
+    params['crew_data'] = json.dumps(crew_dict)
 
     return render_to_response("insert_service.html", RequestContext(request, params))

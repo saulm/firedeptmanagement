@@ -15,16 +15,16 @@
 		<tbody>
 			{%for service in services%}
 				<tr>
-					<td><a href="{% url view_service service_id=service.id%}">{{service.id}}</a></td>
-					<td><a href="{% url view_service service_id=service.id%}">{{service.date|date:"d/n/Y"}}</a></td>
-					<td><a href="{% url view_service service_id=service.id%}">{{service.time|date:"Hi"}}</a></td>
+					<td><a href="{% url 'view_service' service_id=service.id%}">{{service.id}}</a></td>
+					<td><a href="{% url 'view_service' service_id=service.id%}">{{service.date|date:"d/n/Y"}}</a></td>
+					<td><a href="{% url 'view_service' service_id=service.id%}">{{service.time|date:"Hi"}}</a></td>
 					<td>{{service.service_type}}</td>
 					<td>{{service.description}}</td>
 					<td>
 						{% for vehicle in service.vehicles.all %}
 							<div>
 								{{vehicle.vehicle.name}}
-								<a href="{% url perfil_f ff_id=vehicle.lead.id %}">
+								<a href="{% url 'perfil_f' ff_id=vehicle.lead.id %}">
 									{%if vehicle.lead.picture%}
 										{% thumbnail vehicle.lead.picture "35x35" crop="center" format="PNG"   as im %}
 											<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
@@ -34,7 +34,7 @@
 									{%endif%}
 								</a>
 								{%for crew_member in vehicle.crew.all%}
-									<a href="{% url perfil_f ff_id=crew_member.id %}">
+									<a href="{% url 'perfil_f' ff_id=crew_member.id %}">
 										{%if crew_member.picture%}
 											{% thumbnail crew_member.picture "35x35" crop="center" format="PNG"   as im %}
 												<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>

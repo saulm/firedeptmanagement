@@ -11,7 +11,7 @@
 		{% if form.errors %}
 			<div class="error">Usuario y/o Contraseña incorrectos</div>
 		{% endif %}
-		<form method="post" action="{% url django.contrib.auth.views.login %}">{% csrf_token %}
+		<form method="post" action="{% url 'django.contrib.auth.views.login' %}">{% csrf_token %}
 				<div class="row span6">
 					<div class="span2">
 						Nombre de Usuario:

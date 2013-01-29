@@ -7,7 +7,7 @@ from django.template.context import RequestContext
 from django.contrib import messages
 from django.http import HttpResponse
 from utils.serialization import get_values
-import simplejson
+import json
 
 
 @login_required
@@ -88,4 +88,4 @@ def delete_phone(request, phone_id):
 def autocomplete_firefighter(request):
     term = request.GET.get("term", "")
     ffs = Firefighter.search(term)
-    return HttpResponse(simplejson.dumps([get_values(x) for x in ffs]))
+    return HttpResponse(json.dumps([get_values(x) for x in ffs]))

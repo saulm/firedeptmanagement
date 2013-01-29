@@ -21,7 +21,7 @@
 		<p>
 			Las sugerencias son enviadas de forma anónima a los Gerentes y a la Comandancia, para sugerencias/problemas sobre el sistema escribir un correo detallado a <a href="mailto:smoncada@bomberos.usb.ve">smoncada@bomberos.usb.ve</a>
 		</p>
-		<form method="post" action="{% url create_suggestion %}" class="well">
+		<form method="post" action="{% url 'create_suggestion' %}" class="well">
 			{% csrf_token %}
 			<label>{{form.text.label}}</label>
 			{{form.text}}

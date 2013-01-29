@@ -1,11 +1,10 @@
-django==1.4
+-e git://github.com/django/django.git#egg=django
 python-ldap==2.4.3
 django-auth-ldap==1.1
 PIL==1.1.7
 South==0.7.3
 sorl-thumbnail
 django-bootstrap-toolkit
-simplejson
 
 # To use opera
  MySQL-python 

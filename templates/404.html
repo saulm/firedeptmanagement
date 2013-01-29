@@ -43,7 +43,7 @@
 	<div class="container">
 		<div class="row header">
 			<div class="span2">
-				<a href="{% url frontpage%}" title="Regresar al inicio" id="logo">
+				<a href="{% url 'frontpage' %}" title="Regresar al inicio" id="logo">
 	  				<img src="{{STATIC_URL}}img/logo_top.gif" alt="Logo CBVUSB" width="170px" />
 				</a>
 			</div>
@@ -83,7 +83,7 @@
     		<div class="container">
       			<ul class="nav">
 					<li class="active">
-						<a href="{% url frontpage%}">Inicio</a>
+						<a href="{% url 'frontpage' %}">Inicio</a>
 					</li>
  					<li>
 						<a href="http://bomberos.usb.ve/gallery">Fotos</a>
@@ -96,7 +96,7 @@
 		              	<ul class="dropdown-menu">
 		                	<li ><a  href="https://bomberos.usb.ve/firemail">Email</a></li>
 		                	<li><a href="https://bomberos.usb.ve/confluence">Confluence</a></li>
-		                	<li><a href="{%url base%}" >Sistema de Gestión</a></li>
+		                	<li><a href="{%url 'base' %}" >Sistema de Gestión</a></li>
 		                	<li><a href="http://bomberos.usb.ve/inventario" >Sistema de Inventario</a></li>
 		                	
 		              	</ul>
