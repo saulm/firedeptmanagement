@@ -7,7 +7,7 @@ class ServiceVehicleInline(admin.StackedInline):
 
 class ServiceAffectedInline(admin.StackedInline):
     model = ServiceAffected
-    extra = 1
+    extra = 0
 
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ('id', 'date', 'time', 'service_type', 'description', 'location')
