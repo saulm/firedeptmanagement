@@ -69,7 +69,7 @@ class Service(models.Model):
     service_type = models.CharField(max_length=6, choices=SERVICE_TYPE_CHOICES, verbose_name="Tipo")
     description = models.TextField(verbose_name=u"Descripción")
 
-    affected = models.ManyToManyField(ServiceAffected, verbose_name=u"Afectados")
+    affected = models.ManyToManyField(ServiceAffected, verbose_name=u"Afectados", null=True, blank=True)
 
     location = models.TextField(verbose_name=u'Dirección', null=True, blank=True)
     map_location = LocationField(verbose_name=u'Ubicación en Mapa', blank=True, max_length=255)
