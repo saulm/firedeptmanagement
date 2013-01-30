@@ -29,3 +29,7 @@ class LocationField(models.CharField):
     def formfield(self, **kwargs):
         kwargs['widget'] = LocationPickerWidget
         return super(LocationField, self).formfield(**kwargs)
+
+
+from south.modelsinspector import add_introspection_rules
+add_introspection_rules([], ["^common\.widgets\.LocationField"])
