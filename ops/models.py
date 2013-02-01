@@ -4,6 +4,7 @@ from common.widgets import LocationField
 from personal.models import Firefighter
 from common.models import BasePerson
 from django.core.validators import MinValueValidator
+from django.core.exceptions import ValidationError
 
 class Vehicle(models.Model):
     class Meta:
@@ -116,9 +117,9 @@ class ArrestPayment(models.Model):
 
     creation_date = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(Firefighter, related_name='arrest_payments_created', editable=False, null=True, blank=True)
-    payer = models.ForeignKey(Firefighter, related_name="arrests_payments", verbose_name=u"Arrestado", null=True, blank=True)
-    start_time = models.DateTimeField(verbose_name="Fecha de inicio")
-    end_time = models.DateTimeField(verbose_name="Fecha de fin")
+    payer = models.ForeignKey(Firefighter, related_name="arrests_payments", verbose_name=u"Persona que paga el arresto", null=True, blank=True)
+    start_time = models.DateTimeField(verbose_name="Fecha/Hora de inicio")
+    end_time = models.DateTimeField(verbose_name="Fecha/Hora de fin")
     minutes = models.IntegerField(verbose_name=u'Minutos', validators=[MinValueValidator(0)], editable=False)
     approved_by_ops = models.BooleanField(default=False, verbose_name=u"Aprobado por Operaciones")
     
@@ -126,4 +127,12 @@ class ArrestPayment(models.Model):
         delta = self.end_time - self.start_time
         self.minutes = int(delta.total_seconds()/60)
         super(ArrestPayment, self).save(*args, **kwargs)
+    
+    def clean(self):
+        if self.end_time <= self.start_time:
+            raise ValidationError('La fecha de fin debe ser mayor que la fecha de inicio')
+    
+    def __unicode__(self):
+        return "%s %s %s" % (str(self.start_time),  str(self.minutes), str(self.payer))
+
     

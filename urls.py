@@ -32,6 +32,7 @@ urlpatterns = patterns('',
                        url(r'^gestion/servicio/(?P<service_id>\d+)/$', 'firedeptmanagement.ops.views.view_service', name="view_service"),
                        
                        url(r'^gestion/arrestos/insertar/$', 'firedeptmanagement.ops.views.insert_arrest', name="insert_arrest"),
+                       url(r'^gestion/arrestos/insertar/pago/$', 'firedeptmanagement.ops.views.insert_arrest_payment', name="insert_arrest_payment"),
                        
                        
                        url(r'^gestion/personas/autocompletar/$', 'firedeptmanagement.common.views.autocomplete_person', name="autocomplete_person"),

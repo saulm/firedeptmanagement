@@ -1,11 +1,11 @@
 #coding=utf-8
 from django.forms.models import ModelForm
-from ops.models import Service, Vehicle, ServiceAffected, Arrest
+from ops.models import Service, Vehicle, ServiceAffected, Arrest, ArrestPayment
 from django.db import models
 from django.core import validators
 from common.models import BasePerson
 from django import forms
-
+from django.forms.widgets import SplitDateTimeWidget
 
 def make_custom_datefield(f):
     formfield = f.formfield()
@@ -76,6 +76,8 @@ def make_custom_datefield_for_arrest(f):
         formfield.widget.attrs.update({'class': 'datePicker',
                                        'readonly': 'true',
                                        "placeholder": "dd/mm/aa"})
+    elif isinstance(f, models.TimeField):
+        formfield.widget.format = '%H%M'
     return formfield
 
 
@@ -83,7 +85,19 @@ class ArrestForm(ModelForm):
     arrested_select = forms.CharField(label=u'Arrestado', required=True)
     arrested = forms.CharField(widget=forms.HiddenInput, required=True)
     formfield_callback = make_custom_datefield_for_arrest
+    
     class Meta:
         model = Arrest
         exclude = ('approved_by_ops', 'arrested')
         fields = ('date', 'arrested_select', 'time', 'was_notified', 'description')
+        
+class ArrestPaymentForm(forms.Form):
+    formfield_callback = make_custom_datefield_for_arrest
+    
+    payer_select = forms.CharField(label=u'Persona que paga arresto', required=True)
+    payer = forms.CharField(widget=forms.HiddenInput, required=True)
+    start_time_date = forms.DateField(label=u"Fecha de Inicio")
+    start_time_time = forms.TimeField(label=u"Hora de Inicio", help_text=u"HHMM")
+    end_time_date = forms.DateField(label=u"Fecha de Fin")
+    end_time_time = forms.TimeField(label=u"Hora de Fin", help_text=u"HHMM")
+    

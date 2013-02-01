@@ -1,15 +1,17 @@
-from ops.forms import ServiceForm, AffectedForm, ServiceVehicleForm, ArrestForm
+from ops.forms import ServiceForm, AffectedForm, ServiceVehicleForm, ArrestForm, ArrestPaymentForm
 from django.shortcuts import render_to_response, redirect
 from django.template.context import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.forms.formsets import formset_factory
-from ops.models import ServiceVehicle, ServiceAffected, Service
+from ops.models import ServiceVehicle, ServiceAffected, Service, ArrestPayment
 from personal.models import Firefighter
 from common.models import BasePerson, TelephoneNumber, PersonTelephoneNumber
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.exceptions import ValidationError
 from django.db import transaction
 import json
+from datetime import datetime
 
 @login_required
 def list_services(request):
@@ -141,3 +143,35 @@ def insert_arrest(request):
 
     params['arrest_form'] = arrest_form    
     return render_to_response("insert_arrest.html", RequestContext(request, params))
+
+
+@login_required
+@transaction.commit_on_success
+def insert_arrest_payment(request):
+    params = {}
+    arrest_payment_form = ArrestPaymentForm()
+    firefighter = request.user.get_profile()
+    
+    if request.method == 'POST':
+        data = request.POST.copy()
+        data['start_time_time'] = data['start_time_time'][0:-2]+":"+data['start_time_time'][-2:]
+        data['end_time_time'] = data['end_time_time'][0:-2]+":"+data['end_time_time'][-2:]
+        
+        arrest_payment_form = ArrestPaymentForm(data)
+        if arrest_payment_form.is_valid():
+            arrest_payment = ArrestPayment()
+            arrest_payment.created_by = firefighter
+            arrest_payment.start_time = datetime.combine(arrest_payment_form.cleaned_data['start_time_date'], arrest_payment_form.cleaned_data['start_time_time'])
+            arrest_payment.end_time = datetime.combine(arrest_payment_form.cleaned_data['end_time_date'], arrest_payment_form.cleaned_data['end_time_time'])
+            arrest_payment.payer = Firefighter.objects.get(id=arrest_payment_form.cleaned_data['payer'])
+            try:
+                arrest_payment.full_clean()
+                arrest_payment.save()
+                messages.success(request, u'El pago arresto fue guardado exitosamente')
+                return redirect(insert_arrest_payment)
+            except ValidationError as e:
+                messages.error(request, e.message_dict["__all__"][0])
+                
+
+    params['arrest_payment_form'] = arrest_payment_form    
+    return render_to_response("insert_arrest_payment.html", RequestContext(request, params))
