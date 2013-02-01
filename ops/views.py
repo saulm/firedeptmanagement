@@ -1,4 +1,4 @@
-from ops.forms import ServiceForm, AffectedForm, ServiceVehicleForm
+from ops.forms import ServiceForm, AffectedForm, ServiceVehicleForm, ArrestForm
 from django.shortcuts import render_to_response, redirect
 from django.template.context import RequestContext
 from django.contrib.auth.decorators import login_required
@@ -119,3 +119,25 @@ def insert_service(request):
     params['crew_data'] = json.dumps(crew_dict)
 
     return render_to_response("insert_service.html", RequestContext(request, params))
+
+
+@login_required
+@transaction.commit_on_success
+def insert_arrest(request):
+    params = {}
+    arrest_form = ArrestForm()
+    firefighter = request.user.get_profile()
+    
+    if request.method == 'POST':
+        data = request.POST.copy()
+        arrest_form = ArrestForm(data)
+        if arrest_form.is_valid():
+            arrest = arrest_form.save(commit=False)
+            arrest.created_by = firefighter
+            arrest.arrested = Firefighter.objects.get(id=arrest_form.cleaned_data['arrested'])
+            arrest.save()
+            messages.success(request, u'El arresto fue guardado exitosamente')
+            return redirect(insert_arrest)
+
+    params['arrest_form'] = arrest_form    
+    return render_to_response("insert_arrest.html", RequestContext(request, params))

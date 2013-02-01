@@ -1,0 +1,45 @@
+{%extends "base.html" %}
+{% load bootstrap_toolkit %}
+{% block content %}
+<div>
+	<form class="form-horizontal" style="margin-bottom: 30px" method="post">
+		{% csrf_token %}
+		{{arrest_form|as_bootstrap}}
+		<button type="submit" class="btn btn-primary" style="margin-left:400px">Insertar</button>
+	</form>
+</div>
+{% endblock %}
+{% block scripts%}
+ 	{{block.super}}
+	<script type="text/javascript" >
+		$(document).ready(function(){
+			$("input.datePicker").datepicker();
+			$("input[name$='arrested_select']").autocomplete({
+				source: function( request, response ) {
+					var element = this.element;
+					$.ajax({
+						url: "/gestion/bomberos/autocompletar/",
+						dataType: "json",
+						data: {
+							term: request.term
+						},
+						success: function( data ) {
+							response( $.map( data, function( item ) {
+								return {
+									label: item.first_name +" "+item.last_name,
+									value: item.first_name +" "+item.last_name,
+									id: item.pk
+								};
+							}));
+						}
+					});
+				},
+				minLength: 1,
+				select: function( event, ui ) {
+						$("input[name$='arrested']:hidden").val(ui.item.id);
+						$(event.target).attr('readonly', 'readonly');
+					}
+			});
+		});	
+	</script>
+{%endblock%}

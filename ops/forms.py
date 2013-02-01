@@ -1,6 +1,6 @@
 #coding=utf-8
 from django.forms.models import ModelForm
-from ops.models import Service, Vehicle, ServiceAffected
+from ops.models import Service, Vehicle, ServiceAffected, Arrest
 from django.db import models
 from django.core import validators
 from common.models import BasePerson
@@ -69,3 +69,21 @@ class AffectedForm(ModelForm):
                   'last_name_2', 'gender', 'primary_email', 'phone_code',
                   'phone_number', 'notes')
 
+def make_custom_datefield_for_arrest(f):
+    formfield = f.formfield()
+    if isinstance(f, models.DateField):
+        formfield.widget.format = '%m/%d/%Y'
+        formfield.widget.attrs.update({'class': 'datePicker',
+                                       'readonly': 'true',
+                                       "placeholder": "dd/mm/aa"})
+    return formfield
+
+
+class ArrestForm(ModelForm):
+    arrested_select = forms.CharField(label=u'Arrestado', required=True)
+    arrested = forms.CharField(widget=forms.HiddenInput, required=True)
+    formfield_callback = make_custom_datefield_for_arrest
+    class Meta:
+        model = Arrest
+        exclude = ('approved_by_ops', 'arrested')
+        fields = ('date', 'arrested_select', 'time', 'was_notified', 'description')

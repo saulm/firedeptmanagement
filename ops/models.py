@@ -105,7 +105,9 @@ class Arrest(models.Model):
     def save(self, *args, **kwargs):
         self.minutes = self.time if self.was_notified else self.time*1.5
         super(Arrest, self).save(*args, **kwargs)
-
+        
+    def __unicode__(self):
+        return "%s %s %s" % (str(self.date), str(self.minutes), str(self.arrested))
 
 class ArrestPayment(models.Model):
     class Meta:
@@ -124,5 +126,4 @@ class ArrestPayment(models.Model):
         delta = self.end_time - self.start_time
         self.minutes = int(delta.total_seconds()/60)
         super(ArrestPayment, self).save(*args, **kwargs)
-    
     
