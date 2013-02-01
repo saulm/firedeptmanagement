@@ -39,7 +39,7 @@ class ServiceAffected(models.Model):
 
 class Service(models.Model):
     class Meta:
-        ordering = ['-id', 'date']
+        ordering = ['-date', '-time']
         verbose_name = "Servicio"
         verbose_name_plural = "Servicios"
 
