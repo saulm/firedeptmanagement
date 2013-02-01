@@ -19,7 +19,7 @@
 					<td><a href="{% url 'view_service' service_id=service.id%}">{{service.date|date:"d/n/Y"}}</a></td>
 					<td><a href="{% url 'view_service' service_id=service.id%}">{{service.time|date:"Hi"}}</a></td>
 					<td>{{service.service_type}}</td>
-					<td>{{service.description}}</td>
+					<td>{{service.description|truncatewords:50}}</td>
 					<td>
 						{% for vehicle in service.vehicles.all %}
 							<div>
