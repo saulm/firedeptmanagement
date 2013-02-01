@@ -11,35 +11,8 @@
 {% endblock %}
 {% block scripts%}
  	{{block.super}}
+ 	<script src="{{STATIC_URL}}js/ops/insert_arrest.js"></script>
 	<script type="text/javascript" >
-		$(document).ready(function(){
-			$("input.datePicker").datepicker();
-			$("input[name$='arrested_select']").autocomplete({
-				source: function( request, response ) {
-					var element = this.element;
-					$.ajax({
-						url: "/gestion/bomberos/autocompletar/",
-						dataType: "json",
-						data: {
-							term: request.term
-						},
-						success: function( data ) {
-							response( $.map( data, function( item ) {
-								return {
-									label: item.first_name +" "+item.last_name,
-									value: item.first_name +" "+item.last_name,
-									id: item.pk
-								};
-							}));
-						}
-					});
-				},
-				minLength: 1,
-				select: function( event, ui ) {
-						$("input[name$='arrested']:hidden").val(ui.item.id);
-						$(event.target).attr('readonly', 'readonly');
-					}
-			});
-		});	
+		$(document).ready(insert_arrest_ready());
 	</script>
 {%endblock%}
