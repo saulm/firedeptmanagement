@@ -104,7 +104,7 @@ class Arrest(models.Model):
     approved_by_ops = models.BooleanField(default=False, verbose_name=u"Aprobado por Operaciones")
     
     def save(self, *args, **kwargs):
-        self.minutes = self.time if self.was_notified else self.time*1.5
+        self.minutes = self.time*1.5 if self.was_notified else self.time*2
         super(Arrest, self).save(*args, **kwargs)
         
     def __unicode__(self):
