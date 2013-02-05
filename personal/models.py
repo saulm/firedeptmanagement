@@ -87,7 +87,7 @@ class Firefighter(Person):
 
 class RankChange(models.Model):
     class Meta:
-        verbose_name = "Ascenso"
+        verbose_name = u"Ascenso"
         ordering = ['date']
 
     firefighter = models.ForeignKey(Firefighter)
@@ -114,7 +114,7 @@ class Condition(models.Model):
 class ConditionChange(models.Model):
     class Meta:
         verbose_name = u"Cámbio de Condición"
-        verbose_name_plural = u"Cámbio de Condiciones"
+        verbose_name_plural = u"Cambios de Condición"
         ordering = ["date"]
 
     firefighter = models.ForeignKey(Firefighter, verbose_name=u'Bombero')
@@ -123,7 +123,7 @@ class ConditionChange(models.Model):
     link_to_doc = models.URLField(verbose_name=u'Link al comunicado', null=True, blank=True)
 
     def __unicode__(self):
-        return str(self.condition) + " a " + str(self.firefighter) + " el " + str(self.date) 
+        return unicode(self.condition) + u" a " + unicode(self.firefighter) + u" el " + str(self.date) 
 
 
 class Condecoration(models.Model):
@@ -135,13 +135,13 @@ class Condecoration(models.Model):
     description = models.TextField(null=True, blank=True, verbose_name=u'Descripción')
 
     def __unicode__(self):
-        return self.name
+        return unicode(self.name)
 
 
 class CondecorationAward(models.Model):
     class Meta:
         verbose_name = u"Otorgamiento de Condecoración"
-        verbose_name_plural = u"Otorgamiento de Condecoraciones"
+        verbose_name_plural = u"Otorgamientos de Condecoracion"
         ordering = ["date"]
 
     firefighter = models.ForeignKey(Firefighter, verbose_name=u'Bombero')
@@ -150,13 +150,13 @@ class CondecorationAward(models.Model):
     link_to_doc = models.URLField(verbose_name=u'Link al comunicado', null=True, blank=True)
 
     def __unicode__(self):
-        return str(self.condecoration) + " el " + str(self.date) + " a " + str(self.firefighter)
+        return unicode(self.condecoration) + " el " + unicode(self.date) + " a " + unicode(self.firefighter)
 
 
 class FirefighterHoliday(models.Model):
     firefighter = models.ForeignKey(Firefighter, verbose_name=u'Bombero')
-    start_at = models.DateField("Desde", db_index=True)
-    end_at = models.DateField("Hasta", db_index=True)
+    start_at = models.DateField(u"Desde", db_index=True)
+    end_at = models.DateField(u"Hasta", db_index=True)
     link_to_doc = models.URLField(verbose_name=u'Link al comunicado', null=True, blank=True)
 
     class Meta:
@@ -167,10 +167,10 @@ class FirefighterHoliday(models.Model):
         
     def clean(self):
         if self.start_at > self.end_at:
-            raise ValidationError('Desde debe ser una fecha menor que Hasta')
+            raise ValidationError(u'Desde debe ser una fecha menor que Hasta')
     
     def __unicode__(self):
-        return str(self.firefighter) + " desde: " + str(self.start_at) + " hasta: " + str(self.end_at)
+        return unicode(self.firefighter) + " desde: " + unicode(self.start_at) + " hasta: " + unicode(self.end_at)
     
 
 @receiver(post_save, sender=User)
@@ -198,7 +198,7 @@ if django_settings.AUTH_LDAP_BIND_PASSWORD:
             conn.set_option(opt, value)
 
         username = instance.first_name[0] + "".join(instance.last_name.split(" "))
-        username = str(username.lower())
+        username = unicode(username.lower())
         uid = gid = 1500 + instance.id
         new_password = get_pronounceable_password()
         new_user_group = [
