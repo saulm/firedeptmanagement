@@ -2,7 +2,7 @@
 python-ldap==2.4.3
 django-auth-ldap==1.1
 PIL==1.1.7
-South==0.7.3
+South==0.7.6
 sorl-thumbnail
 django-bootstrap-toolkit
 

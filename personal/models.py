@@ -88,10 +88,12 @@ class Firefighter(Person):
 class RankChange(models.Model):
     class Meta:
         verbose_name = "Ascenso"
+        ordering = ['date']
 
     firefighter = models.ForeignKey(Firefighter)
     rank_obtained = models.ForeignKey(Rank, verbose_name=u'Rango Obtenido')
     date = models.DateField(verbose_name=u'Fecha')
+    link_to_doc = models.URLField(verbose_name=u'Link al comunicado', null=True, blank=True)
 
     def __unicode__(self):
         return str(self.rank_obtained) + " " + str(self.date)
@@ -118,6 +120,7 @@ class ConditionChange(models.Model):
     firefighter = models.ForeignKey(Firefighter, verbose_name=u'Bombero')
     condition = models.ForeignKey(Condition, verbose_name=u'Condición')
     date = models.DateField(verbose_name=u'Fecha')
+    link_to_doc = models.URLField(verbose_name=u'Link al comunicado', null=True, blank=True)
 
     def __unicode__(self):
         return str(self.condition) + " a " + str(self.firefighter) + " el " + str(self.date) 
@@ -144,6 +147,7 @@ class CondecorationAward(models.Model):
     firefighter = models.ForeignKey(Firefighter, verbose_name=u'Bombero')
     condecoration = models.ForeignKey(Condecoration, verbose_name=u'Condecoración')
     date = models.DateField(verbose_name=u'Fecha')
+    link_to_doc = models.URLField(verbose_name=u'Link al comunicado', null=True, blank=True)
 
     def __unicode__(self):
         return str(self.condecoration) + " el " + str(self.date) + " a " + str(self.firefighter)
@@ -153,6 +157,7 @@ class FirefighterHoliday(models.Model):
     firefighter = models.ForeignKey(Firefighter, verbose_name=u'Bombero')
     start_at = models.DateField("Desde", db_index=True)
     end_at = models.DateField("Hasta", db_index=True)
+    link_to_doc = models.URLField(verbose_name=u'Link al comunicado', null=True, blank=True)
 
     class Meta:
         verbose_name = u"Días de Permiso"
