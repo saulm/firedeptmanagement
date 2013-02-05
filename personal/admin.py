@@ -15,15 +15,20 @@ class ConditionChangeInline(admin.StackedInline):
     model = ConditionChange
     extra = 1
 
-
 class CondecorationAwardInline(admin.StackedInline):
     model = CondecorationAward
     extra = 1
 
 class FirefighterHolidayInline(admin.StackedInline):
+    list_display = ('firefighter', 'start_at', 'end_at')
+    list_display_links = ('firefighter', 'start_at', 'end_at')
     model = FirefighterHoliday
     extra = 1
 
+class FirefighterHolidayAdmin(admin.ModelAdmin):
+    list_display = ('firefighter', 'start_at', 'end_at')
+    list_display_links = ('firefighter', 'start_at', 'end_at')
+        
 
 class FirefighterAdmin(admin.ModelAdmin):
     list_display = ('last_name', 'first_name', 'number', 'id_document', 'primary_email', 'alternate_email')
@@ -41,8 +46,10 @@ admin.site.register(Company)
 admin.site.register(Condition)
 admin.site.register(Address)
 admin.site.register(City)
+admin.site.register(ConditionChange)
 admin.site.register(Condecoration)
-admin.site.register(FirefighterHoliday)
+admin.site.register(FirefighterHoliday, FirefighterHolidayAdmin)
 admin.site.register(CondecorationAward)
 admin.site.register(BasePerson, BasePersonAdmin)
 admin.site.register(Person, PersonAdmin)
+

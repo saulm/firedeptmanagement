@@ -113,14 +113,14 @@ class ConditionChange(models.Model):
     class Meta:
         verbose_name = u"Cámbio de Condición"
         verbose_name_plural = u"Cámbio de Condiciones"
-
+        ordering = ["date"]
 
     firefighter = models.ForeignKey(Firefighter, verbose_name=u'Bombero')
     condition = models.ForeignKey(Condition, verbose_name=u'Condición')
     date = models.DateField(verbose_name=u'Fecha')
 
     def __unicode__(self):
-        return str(self.condition) + " " + str(self.date)
+        return str(self.condition) + " a " + str(self.firefighter) + " el " + str(self.date) 
 
 
 class Condecoration(models.Model):
@@ -138,13 +138,15 @@ class Condecoration(models.Model):
 class CondecorationAward(models.Model):
     class Meta:
         verbose_name = u"Otorgamiento de Condecoración"
+        verbose_name_plural = u"Otorgamiento de Condecoraciones"
+        ordering = ["date"]
 
     firefighter = models.ForeignKey(Firefighter, verbose_name=u'Bombero')
     condecoration = models.ForeignKey(Condecoration, verbose_name=u'Condecoración')
     date = models.DateField(verbose_name=u'Fecha')
 
     def __unicode__(self):
-        return str(self.condecoration) + " " + str(self.date)
+        return str(self.condecoration) + " el " + str(self.date) + " a " + str(self.firefighter)
 
 
 class FirefighterHoliday(models.Model):
@@ -153,14 +155,18 @@ class FirefighterHoliday(models.Model):
     end_at = models.DateField("Hasta", db_index=True)
 
     class Meta:
-        verbose_name = u"Vacación"
-        verbose_name_plural = "Vacaciones"
+        verbose_name = u"Días de Permiso"
+        verbose_name_plural = u"Días de Permiso"
         unique_together = ('firefighter', 'start_at', 'end_at')
-
+        ordering = ["start_at"]
+        
     def clean(self):
         if self.start_at > self.end_at:
             raise ValidationError('Desde debe ser una fecha menor que Hasta')
-
+    
+    def __unicode__(self):
+        return str(self.firefighter) + " desde: " + str(self.start_at) + " hasta: " + str(self.end_at)
+    
 
 @receiver(post_save, sender=User)
 def join_user_profile(sender, instance, created, **kwargs):
