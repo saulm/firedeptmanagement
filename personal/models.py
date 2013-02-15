@@ -10,7 +10,7 @@ from utils.passwords import get_pronounceable_password, makeSecret
 from django.conf import settings as django_settings
 from django.core.exceptions import ValidationError
 from sorl.thumbnail import ImageField
-from django.db.models import Q
+from django.db.models import Q, Sum
 from local_settings import send_welcome_email
 from local_settings import send_webmaster_email
 
@@ -84,7 +84,18 @@ class Firefighter(Person):
         conn.modify_s('uid='+username+',ou=users,dc=bomberos,dc=usb,dc=ve', mod_attrs)
 
         send_welcome_email(str(self), username, new_password, self.alternate_email)
-
+        
+    def total_valid_arrests(self):
+        minutes = self.arrests.filter(approved_by_ops=True).aggregate(Sum('minutes'))['minutes__sum']
+        return minutes if minutes else 0
+    
+    def total_valid_arrests_payments(self):
+        minutes = self.arrests_payments.filter(approved_by_ops=True).aggregate(Sum('minutes'))['minutes__sum']
+        return minutes if minutes else 0
+    
+    def total_arrests(self):
+        return self.total_valid_arrests() - self.total_valid_arrests_payments()
+    
 class RankChange(models.Model):
     class Meta:
         verbose_name = u"Ascenso"

@@ -1,23 +1,25 @@
 {%extends "base.html" %}
 {% load thumbnail %}
 {%block content%}
-		<div class="span2">
-			{%if firefighter.picture%}
-				{% thumbnail firefighter.picture "100x100" crop="center" format="PNG"   as im %}
-					<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
-				{% endthumbnail %}
-			{%endif%}
-		</div>
-		<div class="span6">
-		<h1>
-			{{firefighter.current_rank}} {{firefighter.first_name}} {{firefighter.first_name_2}} {{firefighter.last_name}} {{firefighter.last_name_2}}
-		</h1>
-		{%if firefighter.initials %}<h2>{{firefighter.initials}} #{{firefighter.number}} </h2>{%endif%}
-		</div>
+<div class="row">
+	<div class="span2">
+		{%if firefighter.picture%}
+			{% thumbnail firefighter.picture "100x100" crop="center" format="PNG"   as im %}
+				<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
+			{% endthumbnail %}
+		{%endif%}
 	</div>
-	<div class="span5">
+	<div class="span6">
+	<h1>
+		{{firefighter.current_rank}} {{firefighter.first_name}} {{firefighter.first_name_2}} {{firefighter.last_name}} {{firefighter.last_name_2}}
+	</h1>
+	{%if firefighter.initials %}<h2>{{firefighter.initials}} #{{firefighter.number}} </h2>{%endif%}
+	</div>
+</div>
+<div class="row">
+	<div class="span6">
 		<h3>Datos Básicos</h3>
-		<ul class="unstyled">
+		<ul >
 			<li>Cedula: <strong>{{firefighter.id_document|default_if_none:"" }}</strong></li>
 			<li>Fecha de Nacimiento: <strong>{{firefighter.birth_date|default_if_none:"" }}</strong></li>
 			<li>Sexo: <strong>{{firefighter.gender|default_if_none:"" }}</strong></li>
@@ -25,9 +27,9 @@
 		</ul>
 		
 	</div>
-	<div class="span5">
+	<div class="span6">
 		<h3>Datos de Contacto:</h3>
-		<ul class="unstyled">
+		<ul>
 			{%for phone in firefighter.persontelephonenumber_set.all %}
 				<li>{{phone}}</li>
 			{%endfor%}
@@ -37,4 +39,13 @@
 		</ul>
 	</div>
 </div>
+{%if user.get_profile.id == firefighter.id %}
+	<div class="row">
+		<div class="span6">
+			<h3>Arrestos:</h3>
+			<p>Debes {{firefighter.total_arrests}} minutos de arresto</p>
+		</div>
+	</div>
+{%endif%}
+	
 {%endblock%}

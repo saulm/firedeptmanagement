@@ -90,13 +90,13 @@ class ServiceVehicle(models.Model):
 
 class Arrest(models.Model):
     class Meta:
-        verbose_name = "Arresto"
-        verbose_name_plural = "Arrestos"
+        verbose_name = u"Arresto"
+        verbose_name_plural = u"Arrestos"
 
     creation_date = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(Firefighter, related_name='arrests_created', editable=False, null=True, blank=True)
     arrested = models.ForeignKey(Firefighter, related_name="arrests", verbose_name=u"Arrestado", null=True, blank=True)
-    date = models.DateField(verbose_name="Fecha")
+    date = models.DateField(verbose_name=u"Fecha")
     description = models.TextField(verbose_name=u"Descripción")
     was_notified = models.BooleanField(default=False, verbose_name=u"Notificó")
     time = models.IntegerField(verbose_name=u'Minutos de ausencia', validators=[MinValueValidator(0)])
@@ -108,31 +108,36 @@ class Arrest(models.Model):
         super(Arrest, self).save(*args, **kwargs)
         
     def __unicode__(self):
-        return "%s %s %s" % (str(self.date), str(self.minutes), str(self.arrested))
+        return u"%s %s %s" % (unicode(self.date), unicode(self.minutes), unicode(self.arrested))
 
 class ArrestPayment(models.Model):
     class Meta:
-        verbose_name = "Pago de Arresto"
-        verbose_name_plural = "Pagos de Arresto"
+        verbose_name = u"Pago de Arresto"
+        verbose_name_plural = u"Pagos de Arresto"
 
     creation_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(Firefighter, related_name='arrest_payments_created', editable=False, null=True, blank=True)
-    payer = models.ForeignKey(Firefighter, related_name="arrests_payments", verbose_name=u"Persona que paga el arresto", null=True, blank=True)
-    start_time = models.DateTimeField(verbose_name="Fecha/Hora de inicio")
-    end_time = models.DateTimeField(verbose_name="Fecha/Hora de fin")
+    created_by = models.ForeignKey(Firefighter, related_name=u'arrest_payments_created', editable=False, null=True, blank=True)
+    payer = models.ForeignKey(Firefighter, related_name=u"arrests_payments", verbose_name=u"Persona que paga el arresto", null=True, blank=True)
+    start_time = models.DateTimeField(verbose_name=u"Fecha/Hora de inicio")
+    end_time = models.DateTimeField(verbose_name=u"Fecha/Hora de fin")
     minutes = models.IntegerField(verbose_name=u'Minutos', validators=[MinValueValidator(0)], editable=False)
     approved_by_ops = models.BooleanField(default=False, verbose_name=u"Aprobado por Operaciones")
     
     def save(self, *args, **kwargs):
         delta = self.end_time - self.start_time
-        self.minutes = int(delta.total_seconds()/60)
+        self.minutes = int( delta.total_seconds()/60 )
         super(ArrestPayment, self).save(*args, **kwargs)
     
     def clean(self):
+        delta = self.end_time - self.start_time
+        mins  = int( delta.total_seconds()/60 )
+        
         if self.end_time <= self.start_time:
-            raise ValidationError('La fecha de fin debe ser mayor que la fecha de inicio')
+            raise ValidationError(u'La fecha de fin debe ser mayor que la fecha de inicio')
+        if mins > self.payer.total_arrests():
+            raise ValidationError(u'No puedes pagar más arrestos de los que debes, actualmente debes %d minutos, estas tratando de insertar %d' % (self.payer.total_arrests(), mins))
     
     def __unicode__(self):
-        return "%s %s %s" % (str(self.start_time),  str(self.minutes), str(self.payer))
+        return u"%s %s %s" % (unicode(self.start_time),  unicode(self.minutes), unicode(self.payer))
 
     

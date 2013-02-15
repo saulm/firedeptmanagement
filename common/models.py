@@ -122,7 +122,7 @@ class BasePerson(models.Model):
     alternate_email = models.EmailField(null=True, blank=True, verbose_name='Email Alterno')
 
     def __unicode__(self):
-        return "%s %s" % (self.first_name, self.last_name)
+        return u"%s %s" % (self.first_name, self.last_name)
 
 class PersonTelephoneNumber(models.Model):
     class Meta:
