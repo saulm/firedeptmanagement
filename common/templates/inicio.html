@@ -1,5 +1,123 @@
 {%extends "base.html" %}
-	
+{% load thumbnail %}
 {% block content %}
-<div style="height: 300px;"></div>
+
+<div class="span9">
+	<h2>Últimos Servicios</h2>
+	<div id="map_canvas" style="width: 100%;height: 400px;"></div>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Fecha</th>
+				<th>Hora</th>
+				<th>Tipo</th>
+				<th>Descripción</th>
+				<th>Comisiones</th>
+			</tr>
+		</thead>
+		<tbody>
+			{%for service in last_services%}
+				<tr>
+					<td><a href="{% url 'view_service' service_id=service.id%}">{{service.id}}</a></td>
+					<td><a href="{% url 'view_service' service_id=service.id%}">{{service.date|date:"d/n/Y"}}</a></td>
+					<td><a href="{% url 'view_service' service_id=service.id%}">{{service.time|date:"Hi"}}</a></td>
+					<td>{{service.service_type}}</td>
+					<td>{{service.description|truncatewords:50}}</td>
+					<td>
+						{% for vehicle in service.vehicles.all %}
+							<div>
+								{{vehicle.vehicle.name}}
+								<a href="{% url 'perfil_f' ff_id=vehicle.lead.id %}">
+									{%if vehicle.lead.picture%}
+										{% thumbnail vehicle.lead.picture "35x35" crop="center" format="PNG"   as im %}
+											<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
+										{% endthumbnail %}
+									{%else%}
+										{{lead.initials}}
+									{%endif%}
+								</a>
+								{%for crew_member in vehicle.crew.all%}
+									<a href="{% url 'perfil_f' ff_id=crew_member.id %}">
+										{%if crew_member.picture%}
+											{% thumbnail crew_member.picture "35x35" crop="center" format="PNG"   as im %}
+												<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
+											{% endthumbnail %}
+										{%else%}
+											{{crew_member.initials}}
+										{%endif%}
+									</a>
+								{% endfor %}
+							</div>		
+						{% endfor %}
+					</td>
+				</tr>	
+			{%endfor%}
+		</tbody>
+	</table>
+</div>
+
+
+<div class="span3">
+	<h2>Cumpleañeros del Mes</h2>
+	<ul class="unstyled">
+		{%for ff in birthdays%}
+			<li >
+				{%if ff.picture%}
+					{% thumbnail ff.picture "70x70" crop="center" format="PNG"   as im %}
+						<a href="{% url 'perfil_f' ff_id=ff.id %}"><img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img></a>
+					{% endthumbnail %}
+				{%endif%}
+				<a href="{% url 'perfil_f' ff_id=ff.id %}">{{ff}}</a> 
+				{{ff.birth_date|date:"d N"}}
+			</li>
+		{%endfor%}
+	</ul>
+</div>
+
+
 {% endblock %}
+
+ {% block scripts%}
+ 	{{block.super}}
+	<script type="text/javascript" >
+		function initialize() {
+		  var mapOptions = {
+		    zoom: 20,
+		    center: new google.maps.LatLng(10.408363,-66.875573),
+		    mapTypeId: google.maps.MapTypeId.ROADMAP
+		  }
+		  
+		  var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+		  var LatLngList = [];
+		  var addPoint = function(x, idx){
+		  	var pos = new google.maps.LatLng(x.lat, x.lng);
+		  	LatLngList.push(pos);
+		  	var marker = new google.maps.Marker({
+		    	position: pos,
+		    	map: map,
+		      	title:x.id
+		  	});
+		  	
+		  }
+		 
+		  var services_locs = JSON.parse("{{last_services_locations|escapejs}}");
+		  services_locs.forEach(addPoint);
+		  //http://blog.shamess.info/2009/09/29/zoom-to-fit-all-markers-on-google-maps-api-v3/
+		  var bounds = new google.maps.LatLngBounds();
+		  for (var i = 0, LtLgLen = LatLngList.length; i < LtLgLen; i++) {
+		  		bounds.extend (LatLngList[i]);
+		  }
+		  map.fitBounds (bounds);
+		}
+		
+		function loadScript() {
+		  var script = document.createElement("script");
+		  script.type = "text/javascript";
+		  script.src = "http://maps.googleapis.com/maps/api/js?sensor=false&callback=initialize";
+		  document.body.appendChild(script);
+		}
+		
+		window.onload = loadScript;		
+	</script>
+{%endblock%}

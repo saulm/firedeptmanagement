@@ -7,11 +7,21 @@ from django.conf import settings
 from common.models import BasePerson
 from django.core import serializers
 from django.http import HttpResponse
+from datetime import date
+from personal.models import Firefighter
+from ops.models import Service
+import json
 
 @login_required
 def base(request):
-    return render(request, 'inicio.html')
-
+    data = {}
+    f = Firefighter.objects.filter(birth_date__month=date.today().month).order_by("birth_date")
+    data['birthdays'] = [x for x in f if x.current_condition_change() and x.current_condition_change().condition_id != settings.BAJ_CONDITION]
+    data['last_services'] = Service.objects.filter()[:10]
+    services_locs = [{'id':str(service.id), 'loc':service.map_location, 'lat':float(service.map_location.split(",")[0]), 'lng':float(service.map_location.split(",")[1])} for service in data['last_services']] 
+    data['last_services_locations'] = json.dumps(services_locs)
+    
+    return render(request, 'inicio.html', data)
 
 @login_required
 def create_suggestion(request):
@@ -37,5 +47,3 @@ def autocomplete_person(request):
     id_document = request.GET.get("term", "")
     persons = BasePerson.objects.filter(id_document__icontains=id_document).exclude(id_document="")
     return HttpResponse(serializers.serialize('json', persons))
-
-

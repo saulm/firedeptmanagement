@@ -96,6 +96,10 @@ class Firefighter(Person):
     def total_arrests(self):
         return self.total_valid_arrests() - self.total_valid_arrests_payments()
     
+    def current_condition_change(self):
+        condition_changes =  self.condition_changes.all().select_related('condition').order_by("-date")
+        return condition_changes[0] if condition_changes.count() else None
+    
 class RankChange(models.Model):
     class Meta:
         verbose_name = u"Ascenso"
@@ -128,7 +132,7 @@ class ConditionChange(models.Model):
         verbose_name_plural = u"Cambios de Condición"
         ordering = ["date"]
 
-    firefighter = models.ForeignKey(Firefighter, verbose_name=u'Bombero')
+    firefighter = models.ForeignKey(Firefighter, verbose_name=u'Bombero',  related_name="condition_changes")
     condition = models.ForeignKey(Condition, verbose_name=u'Condición')
     date = models.DateField(verbose_name=u'Fecha')
     link_to_doc = models.URLField(verbose_name=u'Link al comunicado', null=True, blank=True)
