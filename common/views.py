@@ -21,7 +21,7 @@ def base(request):
     services_locs = []
     for service in data['last_services']:
         if service.map_location:
-            service_locs.append({'id':str(service.id), 'loc':service.map_location, 'lat':float(service.map_location.split(",")[0]), 'lng':float(service.map_location.split(",")[1])})            
+            services_locs.append({'id':str(service.id), 'loc':service.map_location, 'lat':float(service.map_location.split(",")[0]), 'lng':float(service.map_location.split(",")[1])})            
     data['last_services_locations'] = json.dumps(services_locs)
     
     return render(request, 'inicio.html', data)
