@@ -18,7 +18,10 @@ def base(request):
     f = Firefighter.objects.filter(birth_date__month=date.today().month).order_by("birth_date")
     data['birthdays'] = [x for x in f if x.current_condition_change() and x.current_condition_change().condition_id != settings.BAJ_CONDITION]
     data['last_services'] = Service.objects.filter()[:10]
-    services_locs = [{'id':str(service.id), 'loc':service.map_location, 'lat':float(service.map_location.split(",")[0]), 'lng':float(service.map_location.split(",")[1])} for service in data['last_services']] 
+    services_locs = []
+    for service in data['last_services']:
+        if service.map_location:
+            service_locs.append({'id':str(service.id), 'loc':service.map_location, 'lat':float(service.map_location.split(",")[0]), 'lng':float(service.map_location.split(",")[1])})            
     data['last_services_locations'] = json.dumps(services_locs)
     
     return render(request, 'inicio.html', data)
