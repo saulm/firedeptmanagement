@@ -19,16 +19,18 @@ class ServiceAdmin(admin.ModelAdmin):
 def approve_ops(modeladmin, request, queryset):
     queryset.update(approved_by_ops=True)
 
-approve_ops.short_description = "Aprobar Arrestos seleccionados"
+approve_ops.short_description = "Aprobar seleccionados"
 
 class ArrestAdmin(admin.ModelAdmin):
     list_display = ('date', 'description', 'arrested', 'was_notified', 'time', 'minutes',  'approved_by_ops')
     list_display_links = ('date', 'description')
+    list_filter = ('approved_by_ops','was_notified', 'arrested')
     actions = [approve_ops]
 
 class ArrestPaymentAdmin(admin.ModelAdmin):
     list_display = ('start_time', 'end_time', 'payer', 'minutes', 'approved_by_ops')
     list_display_links = ('start_time', 'end_time')
+    list_filter = ('approved_by_ops','payer')
     actions = [approve_ops]
 
 

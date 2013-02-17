@@ -5,6 +5,13 @@ from personal.models import Firefighter
 from common.models import BasePerson
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
+from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.core.mail import send_mail
+import logging
+
+logger = logging.getLogger('django')
 
 class Vehicle(models.Model):
     class Meta:
@@ -110,6 +117,18 @@ class Arrest(models.Model):
     def __unicode__(self):
         return u"%s %s %s" % (unicode(self.date), unicode(self.minutes), unicode(self.arrested))
 
+@receiver(post_save, sender=Arrest)
+def notify_arrested(sender, instance, created, **kwargs):
+    logger.info("Sending Arrest Email")
+    if created:
+        subject = u"Nuevo Arresto"
+        content = u"%s te ha insertado un nuevo arresto:\n\n%s\n\n%s, este debe ser aprobado por operaciones para ser actualizado en tus arrestos" % (unicode(instance.created_by), unicode(instance), unicode(instance.description))
+        send_mail(subject, content, settings.DEFAULT_FROM_EMAIL, [instance.arrested.primary_email,], fail_silently=True)
+    else:
+        subject = u"Actualización Arrestos"
+        content = u"Tus arrestos han sido actualizados, chequea tu perfil para más información"
+        send_mail(subject, content, settings.DEFAULT_FROM_EMAIL, [instance.arrested.primary_email,], fail_silently=True)
+
 class ArrestPayment(models.Model):
     class Meta:
         verbose_name = u"Pago de Arresto"
@@ -140,4 +159,15 @@ class ArrestPayment(models.Model):
     def __unicode__(self):
         return u"%s %s %s" % (unicode(self.start_time),  unicode(self.minutes), unicode(self.payer))
 
+@receiver(post_save, sender=ArrestPayment)
+def notify_arrest_payment(sender, instance, created, **kwargs):
+    logger.info("Sending Arrest Payment Email")
+    if created:
+        subject = u"Nuevo Pago Arresto"
+        content = u"%s te ha insertado un nuevo pago de arresto:\n\n%s\n\nEste debe ser aprobado por operaciones para ser actualizado en tus arrestos" % (unicode(instance.created_by), unicode(instance), unicode(instance.description))
+        send_mail(subject, content, settings.DEFAULT_FROM_EMAIL, [instance.payer.primary_email,], fail_silently=True)
+    else:
+        subject = u"Actualización Pago de Arresto"
+        content = u"Tus pagos de arresto han sido actualizados, chequea tu perfil para más información"
+        send_mail(subject, content, settings.DEFAULT_FROM_EMAIL, [instance.payer.primary_email,], fail_silently=True)
     
