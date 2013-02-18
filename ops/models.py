@@ -181,7 +181,7 @@ def notify_arrest_payment(sender, instance, created, **kwargs):
     logger.info("Sending Arrest Payment Email")
     if created:
         subject = u"Nuevo Pago Arresto"
-        content = u"%s te ha insertado un nuevo pago de arresto:\n\n%s\n\nEste debe ser aprobado por operaciones para ser actualizado en tus arrestos" % (unicode(instance.created_by), unicode(instance), unicode(instance.description))
+        content = u"%s te ha insertado un nuevo pago de arresto:\n\n%s\n\nEste debe ser aprobado por operaciones para ser actualizado en tus arrestos" % (unicode(instance.created_by), unicode(instance))
         send_mail(subject, content, settings.DEFAULT_FROM_EMAIL, [instance.payer.primary_email,], fail_silently=True)
     else:
         subject = u"Actualización Pago de Arresto"
