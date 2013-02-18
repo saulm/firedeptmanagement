@@ -1,9 +1,10 @@
-from ops.forms import ServiceForm, AffectedForm, ServiceVehicleForm, ArrestForm, ArrestPaymentForm
+#coding=utf-8
+from ops.forms import ServiceForm, AffectedForm, ServiceVehicleForm, ArrestForm, ArrestPaymentForm, ServiceImageForm
 from django.shortcuts import render_to_response, redirect
 from django.template.context import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.forms.formsets import formset_factory
-from ops.models import ServiceVehicle, ServiceAffected, Service, ArrestPayment
+from ops.models import ServiceVehicle, ServiceAffected, Service, ArrestPayment, ServiceImage
 from personal.models import Firefighter
 from common.models import BasePerson, TelephoneNumber, PersonTelephoneNumber
 from django.contrib import messages
@@ -12,6 +13,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 import json
 from datetime import datetime
+from django.shortcuts import render
 
 @login_required
 def list_services(request):
@@ -30,8 +32,32 @@ def list_services(request):
 @login_required
 def view_service(request, service_id):
     service = Service.objects.get(id=service_id)
-    return render_to_response("view_service.html", RequestContext(request, {"service": service}))
+    allow_file_upload = request.user.get_profile() in service.complete_crew()
+    data = {"service": service, 'allow_file_upload':allow_file_upload}
+    
+    if allow_file_upload:
+        image_upload_form =  ServiceImageForm()
+        data["image_upload_form"] = image_upload_form
+    
+    return render(request, "view_service.html", data)
 
+@login_required
+def service_upload_image(request, service_id):
+    
+    if request.method == 'POST':
+        form = ServiceImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            image = ServiceImage()
+            image.service_id = service_id
+            image.uploader = request.user.get_profile()
+            image.file = form.cleaned_data['image']
+            image.save()
+            messages.success(request, u'La foto se guardó exitosamente')
+        else:
+            messages.error(request, u'La foto no se guardó')
+    return redirect('view_service', service_id=service_id)
+    
+    
 @login_required
 @transaction.commit_on_success
 def insert_service(request):

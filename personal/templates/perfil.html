@@ -1,51 +1,91 @@
 {%extends "base.html" %}
 {% load thumbnail %}
 {%block content%}
-<div class="row">
-	<div class="span2">
-		{%if firefighter.picture%}
-			{% thumbnail firefighter.picture "100x100" crop="center" format="PNG"   as im %}
-				<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
-			{% endthumbnail %}
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#info" data-toggle="tab">Datos Básicos</a></li>
+  <li><a href="#services" data-toggle="tab">Servicios</a></li>
+</ul>
+<div class="tab-content">
+	<div  class="tab-pane active" id="info">
+
+		<div class="row">
+			<div class="span2">
+				{%if firefighter.picture%}
+					{% thumbnail firefighter.picture "100x100" crop="center" format="PNG"   as im %}
+						<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
+					{% endthumbnail %}
+				{%endif%}
+			</div>
+			<div class="span6">
+			<h1>
+				{{firefighter.current_rank}} {{firefighter.first_name}} {{firefighter.first_name_2}} {{firefighter.last_name}} {{firefighter.last_name_2}}
+			</h1>
+			{%if firefighter.initials %}<h2>{{firefighter.initials}} #{{firefighter.number|default_if_none:""}} </h2>{%endif%}
+			</div>
+		</div>
+		<div class="row">
+			<div class="span6">
+				<h3>Datos Básicos</h3>
+				<ul >
+					<li>Cedula: <strong>{{firefighter.id_document|default_if_none:"" }}</strong></li>
+					<li>Fecha de Nacimiento: <strong>{{firefighter.birth_date|date:"d N"|default_if_none:"" }}</strong></li>
+					<li>Sexo: <strong>{{firefighter.gender|default_if_none:"" }}</strong></li>
+					{%if firefighter.blood_type and firefighter.blood_type_rh%}<li>Sangre: <strong>Factor {{firefighter.blood_type}} Rh {{firefighter.blood_type_rh}}</strong></li>{%endif%}
+				</ul>
+				
+			</div>
+			<div class="span6">
+				<h3>Datos de Contacto:</h3>
+				<ul>
+					{%for phone in firefighter.persontelephonenumber_set.all %}
+						<li>{{phone}}</li>
+					{%endfor%}
+					
+					<li>Email: {{firefighter.primary_email}}</li>
+					<li>Email: {{firefighter.alternate_email}}</li>
+				</ul>
+			</div>
+		</div>
+		
+		{%if user.get_profile.id == firefighter.id %}
+			<div class="row">
+				<div class="span6">
+					<h3>Arrestos:</h3>
+					<p>Debes {{firefighter.total_arrests}} minutos de arresto</p>
+				</div>
+			</div>
 		{%endif%}
 	</div>
-	<div class="span6">
-	<h1>
-		{{firefighter.current_rank}} {{firefighter.first_name}} {{firefighter.first_name_2}} {{firefighter.last_name}} {{firefighter.last_name_2}}
-	</h1>
-	{%if firefighter.initials %}<h2>{{firefighter.initials}} #{{firefighter.number|default_if_none:""}} </h2>{%endif%}
-	</div>
-</div>
-<div class="row">
-	<div class="span6">
-		<h3>Datos Básicos</h3>
-		<ul >
-			<li>Cedula: <strong>{{firefighter.id_document|default_if_none:"" }}</strong></li>
-			<li>Fecha de Nacimiento: <strong>{{firefighter.birth_date|date:"d N"|default_if_none:"" }}</strong></li>
-			<li>Sexo: <strong>{{firefighter.gender|default_if_none:"" }}</strong></li>
-			{%if firefighter.blood_type and firefighter.blood_type_rh%}<li>Sangre: <strong>Factor {{firefighter.blood_type}} Rh {{firefighter.blood_type_rh}}</strong></li>{%endif%}
-		</ul>
-		
-	</div>
-	<div class="span6">
-		<h3>Datos de Contacto:</h3>
-		<ul>
-			{%for phone in firefighter.persontelephonenumber_set.all %}
-				<li>{{phone}}</li>
-			{%endfor%}
+	<div class="tab-pane" id="services">
+		<div class="row">
+			{%if firefighter.services_lead.count %}
+				<div class="span12">
+					<h3>Servicios en los que ha sido jefe: ({{firefighter.services_lead.count}})</h3>
+					{%for service_v in firefighter.services_lead.all %}
+						<a href="{% url 'view_service' service_id=service_v.service.id%}">#{{service_v.service.id}} ({{service_v.service.date|date:"d/m/y"}})</a>
+					{%endfor%}
+				</div>
+			{%endif%}
 			
-			<li>Email: {{firefighter.primary_email}}</li>
-			<li>Email: {{firefighter.alternate_email}}</li>
-		</ul>
-	</div>
-</div>
-{%if user.get_profile.id == firefighter.id %}
-	<div class="row">
-		<div class="span6">
-			<h3>Arrestos:</h3>
-			<p>Debes {{firefighter.total_arrests}} minutos de arresto</p>
+			{%if firefighter.services_drove.count %}
+				<div class="span12">
+					<h3>Servicios en los que ha sido conductor: ({{firefighter.services_drove.count}})</h3>
+					{%for service_v in firefighter.services_drove.all %}
+						<a href="{% url 'view_service' service_id=service_v.service.id%}">#{{service_v.service.id}} ({{service_v.service.date|date:"d/m/y"}})</a>
+					{%endfor%}
+				</div>
+			{%endif%}
+			
+			{%if firefighter.in_services.count %}
+				<div class="span12">
+					<h3>Servicios en los que ha sido parte de una comisión: ({{firefighter.in_services.count}})</h3>
+					{%for service_v in firefighter.in_services.all %}
+						<a href="{% url 'view_service' service_id=service_v.service.id%}">#{{service_v.service.id}} ({{service_v.service.date|date:"d/m/y"}})</a>
+					{%endfor%}
+				</div>
+			{%endif%}
 		</div>
 	</div>
-{%endif%}
+</div>
 	
 {%endblock%}

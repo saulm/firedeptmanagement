@@ -10,6 +10,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.mail import send_mail
 import logging
+from sorl.thumbnail import ImageField
 
 logger = logging.getLogger('django')
 
@@ -82,6 +83,11 @@ class Service(models.Model):
     location = models.TextField(verbose_name=u'Dirección', null=True, blank=True)
     map_location = LocationField(verbose_name=u'Ubicación en Mapa', blank=True, max_length=255)
 
+    def complete_crew(self):
+        complete_crew = set()
+        for vehicle in self.vehicles.all():
+            complete_crew.update(vehicle.complete_crew())
+        return list(complete_crew)
 
 class ServiceVehicle(models.Model):
     class Meta:
@@ -93,8 +99,19 @@ class ServiceVehicle(models.Model):
     crew = models.ManyToManyField(Firefighter, related_name="in_services", verbose_name=u"Tripulación", null=True, blank=True)
     driver = models.ForeignKey(Firefighter, related_name="services_drove", verbose_name=u"Conductor", null=True, blank=True)
     vehicle = models.ForeignKey(Vehicle, verbose_name=u"Unidad", null=True, blank=True)
-
-
+    
+    def complete_crew(self):
+        complete_crew = set(self.crew.all())
+        complete_crew.add(self.lead)
+        if self.driver != None:
+            complete_crew.add(self.driver)
+        return list(complete_crew)
+    
+class ServiceImage(models.Model):
+    service = models.ForeignKey(Service, related_name='images', verbose_name=u"Servicio")
+    uploader = models.ForeignKey(Firefighter)
+    file = ImageField(upload_to="images/services/", verbose_name='Foto')
+    
 class Arrest(models.Model):
     class Meta:
         verbose_name = u"Arresto"

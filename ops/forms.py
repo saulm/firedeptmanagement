@@ -32,6 +32,8 @@ class ServiceForm(ModelForm):
         model = Service
         exclude = ("affected",)
 
+class ServiceImageForm(forms.Form):
+        image = forms.ImageField(label="Archivo")
 
 class ServiceVehicleForm(forms.Form):
     lead_select = forms.CharField(label=u'Jefe de Comisión', required=True,
