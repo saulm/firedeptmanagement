@@ -47,6 +47,40 @@
 			</div>
 		</div>
 		
+		<div class="row">
+			<div class="span6">
+				<h3>Condición</h3>
+				{% with condition=firefighter.current_condition_change %}
+					{%if condition%}
+						<p>Actualmente es <b>{{condition.condition}}</b>, </p>
+						{%if condition.link_to_doc%}
+							<p>Publicado en <a target="_blank" href="{{condition.link_to_doc}}">{{condition.link_to_doc|truncatechars:40 }}</a></p>
+						{%endif%}
+					{%else%}
+						<p>No hay información de la condición actual.</p>
+					{%endif%}
+				{% endwith %}
+			</div>
+			
+			<div class="span6">
+				<h3>Vacaciones</h3>
+				{%if firefighter.is_on_vacation%}
+					{% with vacation=firefighter.current_vacation %}
+						<p>Actualmente está de vacaciones, hasta el {{vacation.end_at}}</p>
+						{%if vacation.link_to_doc%}
+							<p>Publicado en <a target="_blank" href="{{vacation.link_to_doc}}">{{vacation.link_to_doc|truncatechars:40 }}</a></p>
+						{%endif%}	
+					{% endwith %}
+				{%else%}
+					<p>
+						Actualmente no se encuentra de vacaciones.
+					</p>
+				{%endif%}
+			</div>
+		</div>
+		
+		
+		
 		{%if user.get_profile.id == firefighter.id %}
 			<div class="row">
 				<div class="span6">
@@ -55,6 +89,9 @@
 				</div>
 			</div>
 		{%endif%}
+		
+		
+		
 	</div>
 	<div class="tab-pane" id="services">
 		<div class="row">

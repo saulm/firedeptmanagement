@@ -14,6 +14,7 @@ from django.db.models import Q, Sum
 from local_settings import send_welcome_email
 from local_settings import send_webmaster_email
 from django.conf import settings
+from datetime import date
 
 
 class Rank(models.Model):
@@ -105,6 +106,15 @@ class Firefighter(Person):
         condition = self.current_condition_change() 
         return condition == None or (condition != None and condition.condition_id != settings.BAJ_CONDITION)
     
+    def is_on_vacation(self):
+        today = date.today()
+        return True if self.holidays.filter(start_at__lt=today).filter(end_at__gt=today) else False
+    
+    def current_vacation(self):
+        today = date.today()
+        holidays = self.holidays.filter(start_at__lt=today).filter(end_at__gt=today)
+        return holidays[0] if holidays.count() else None
+    
 class RankChange(models.Model):
     class Meta:
         verbose_name = u"Ascenso"
@@ -174,7 +184,7 @@ class CondecorationAward(models.Model):
 
 
 class FirefighterHoliday(models.Model):
-    firefighter = models.ForeignKey(Firefighter, verbose_name=u'Bombero')
+    firefighter = models.ForeignKey(Firefighter, verbose_name=u'Bombero',  related_name="holidays")
     start_at = models.DateField(u"Desde", db_index=True)
     end_at = models.DateField(u"Hasta", db_index=True)
     link_to_doc = models.URLField(verbose_name=u'Link al comunicado', null=True, blank=True)
