@@ -13,6 +13,7 @@ from sorl.thumbnail import ImageField
 from django.db.models import Q, Sum
 from local_settings import send_welcome_email
 from local_settings import send_webmaster_email
+from django.conf import settings
 
 
 class Rank(models.Model):
@@ -99,6 +100,10 @@ class Firefighter(Person):
     def current_condition_change(self):
         condition_changes =  self.condition_changes.all().select_related('condition').order_by("-date")
         return condition_changes[0] if condition_changes.count() else None
+    
+    def is_active(self):
+        condition = self.current_condition_change() 
+        return condition == None or (condition != None and condition.condition_id != settings.BAJ_CONDITION)
     
 class RankChange(models.Model):
     class Meta:

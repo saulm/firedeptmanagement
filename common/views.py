@@ -16,7 +16,7 @@ import json
 def base(request):
     data = {}
     f = Firefighter.objects.filter(birth_date__month=date.today().month).order_by("birth_date")
-    data['birthdays'] = [x for x in f if x.current_condition_change() and x.current_condition_change().condition_id != settings.BAJ_CONDITION]
+    data['birthdays'] = [x for x in f if x.is_active()]
     data['last_services'] = Service.objects.filter()[:10]
     services_locs = []
     for service in data['last_services']:
