@@ -219,7 +219,7 @@ if django_settings.AUTH_LDAP_BIND_PASSWORD:
         username = instance.first_name[0] + "".join(instance.last_name.split(" "))
         username = unicode(username.lower())
         
-        if not created and not User.objects.count(username=username):
+        if not created or User.objects.filter(username=username).count():
             return
 
         ldap_c = _LDAPConfig.get_ldap()
