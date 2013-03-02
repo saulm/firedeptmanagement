@@ -68,7 +68,7 @@ class Firefighter(Person):
                            Q(primary_email__istartswith=text)
         ).order_by("last_name")
         
-    def update_ldap_password(self):
+    def update_ldap_password(self, password = None):
         if not django_settings.AUTH_LDAP_BIND_PASSWORD:
             return
         
@@ -79,8 +79,8 @@ class Firefighter(Person):
         
         for opt, value in ldap_settings.AUTH_LDAP_CONNECTION_OPTIONS.iteritems():
             conn.set_option(opt, value)
-
-        new_password = get_pronounceable_password()
+        
+        new_password = get_pronounceable_password() if not password else password
         username = self.primary_email.split("@")[0]
         mod_attrs = [(ldap_c.MOD_REPLACE, 'userPassword', makeSecret(new_password))]
         conn.modify_s('uid='+username+',ou=users,dc=bomberos,dc=usb,dc=ve', mod_attrs)
@@ -216,7 +216,10 @@ def join_user_profile(sender, instance, created, **kwargs):
 if django_settings.AUTH_LDAP_BIND_PASSWORD:
     @receiver(post_save, sender=Firefighter)
     def create_ldap_user(sender, instance, created, **kwargs):
-        if not created:
+        username = instance.first_name[0] + "".join(instance.last_name.split(" "))
+        username = unicode(username.lower())
+        
+        if not created and not User.objects.count(username=username):
             return
 
         ldap_c = _LDAPConfig.get_ldap()
@@ -227,8 +230,6 @@ if django_settings.AUTH_LDAP_BIND_PASSWORD:
         for opt, value in ldap_settings.AUTH_LDAP_CONNECTION_OPTIONS.iteritems():
             conn.set_option(opt, value)
 
-        username = instance.first_name[0] + "".join(instance.last_name.split(" "))
-        username = unicode(username.lower())
         uid = gid = 1500 + instance.id
         new_password = get_pronounceable_password()
         new_user_group = [
