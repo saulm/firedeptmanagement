@@ -11,6 +11,7 @@ from django.dispatch import receiver
 from django.core.mail import send_mail
 import logging
 from sorl.thumbnail import ImageField
+from datetime import datetime
 
 logger = logging.getLogger('django')
 
@@ -72,9 +73,15 @@ class Service(models.Model):
     creation_date = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(Firefighter, related_name='services_created', editable=False, null=True, blank=True)
 
-    date = models.DateField(verbose_name="Fecha")
-    time = models.TimeField(verbose_name="Hora", help_text=u"HHMM")
-
+    date = models.DateField(verbose_name="Fecha de inicio")
+    time = models.TimeField(verbose_name="Hora de inicio", help_text=u"HHMM")
+    
+    scene_arrival_date = models.DateField(verbose_name="Fecha de llegada al sitio", null=True)
+    scene_arrival_time = models.TimeField(verbose_name="Hora de llegada al sitio", help_text=u"HHMM", null=True)
+    
+    end_date = models.DateField(verbose_name=u"Fecha de regreso a la estación (Fin del Servicio)", null=True)
+    end_time = models.TimeField(verbose_name=u"Hora de regreso a la estación (Fin del Servicio)", help_text=u"HHMM", null=True)
+    
     service_type = models.CharField(max_length=6, choices=SERVICE_TYPE_CHOICES, verbose_name="Tipo")
     description = models.TextField(verbose_name=u"Descripción")
     
@@ -82,7 +89,37 @@ class Service(models.Model):
 
     location = models.TextField(verbose_name=u'Dirección', null=True, blank=True)
     map_location = LocationField(verbose_name=u'Ubicación en Mapa', blank=True, max_length=255)
-
+    
+    def start_as_dt(self):
+        return datetime.combine(self.date, self.time)
+    
+    def arrival_as_dt(self):
+        return datetime.combine(self.scene_arrival_date, self.scene_arrival_time)
+    
+    def end_as_dt(self):
+        return datetime.combine(self.end_date, self.end_time)
+    
+    def response_time(self):
+        try:
+            return self.arrival_as_dt() - self.start_as_dt()
+        except:
+            return None 
+    
+    def duration(self):
+        try:
+            return self.end_as_dt() - self.start_as_dt()
+        except:
+            return None 
+    
+    def clean(self):
+        start = self.start_as_dt()
+        scene_arrival = self.arrival_as_dt()
+        end = self.end_as_dt()
+        if not scene_arrival >= start:
+            raise ValidationError(u"La fecha de llegada al sitio tiene que ser mayor o igual que la fecha de inicio")
+        if not end > scene_arrival:
+            raise ValidationError(u"La fecha de fin del servicio tiene que ser mayor que la fecha de llegada al sitio")
+        
     def complete_crew(self):
         complete_crew = set()
         for vehicle in self.vehicles.all():

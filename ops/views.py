@@ -71,6 +71,8 @@ def insert_service(request):
     if request.method == 'POST':
         data = request.POST.copy()
         data['time'] = data['time'][0:-2]+":"+data['time'][-2:]
+        data['end_time'] = data['end_time'][0:-2]+":"+data['end_time'][-2:]
+        data['scene_arrival_time'] = data['scene_arrival_time'][0:-2]+":"+data['scene_arrival_time'][-2:]
         
         service_form = ServiceForm(data)
         affected_formset = AffectedFormSet(data, prefix='affected')
@@ -130,8 +132,6 @@ def insert_service(request):
                 if "crew_ids" in k and v!="":
                     crew_ids_str = crew_ids_str+","+v
             crew_ids = [x for x in crew_ids_str.split(",") if x!='']
-
-#            import ipdb;ipdb.set_trace()
             crew = Firefighter.objects.filter(id__in=crew_ids)
             for member in crew:
                 crew_dict[member.id] = str(member)

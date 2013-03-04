@@ -24,7 +24,6 @@ def make_custom_datefield(f):
 
     return formfield
 
-
 class ServiceForm(ModelForm):
     formfield_callback = make_custom_datefield
 

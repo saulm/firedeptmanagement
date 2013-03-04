@@ -260,6 +260,26 @@ function insert_service_ready(settings){
 	var default_affected_form = settings["default_affected_form"];
 	var default_vehicle_form = settings["default_vehicle_form"];
 	
+	$("input#id_date").change(function(){
+		if($("input#id_scene_arrival_date").val() ==""){
+			$("input#id_scene_arrival_date").val($(this).val());
+		}
+		if($("input#id_end_date").val() ==""){
+			$("input#id_end_date").val($(this).val());
+		}
+		
+	});
+	
+	$("input#id_time").change(function(){
+		if($("input#id_scene_arrival_time").val() ==""){
+			$("input#id_scene_arrival_time").val($(this).val());
+		}
+		if($("input#id_end_time").val() ==""){
+			$("input#id_end_time").val($(this).val());
+		}
+		
+	});
+	
 	$("input.datePicker").datepicker({"maxDate": 0});
 	$("input#id_time").mask("9999");
 	

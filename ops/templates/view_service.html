@@ -4,7 +4,13 @@
 {% block content %}
 	<h2>Servicio #{{service.id}} - {{service.service_type}}</h2>
 	<div class="row" style="margin-bottom: 20px;">
-	  	<div class="span9">Fecha: <strong>{{service.date|date:"d/n/Y"}} {{service.time|date:"Hi"}}</strong></div>
+	  	<div class="span2">Fecha: <strong>{{service.date|date:"d/n/Y"}} {{service.time|date:"Hi"}}</strong></div>
+	  	<div class="span2">A8: <strong>{{service.scene_arrival_date|date:"d/n/Y"}} {{service.scene_arrival_time|date:"Hi"}}</strong></div>
+	  	<div class="span2">A11: <strong>{{service.end_date|date:"d/n/Y"}} {{service.end_time|date:"Hi"}}</strong></div>
+	  	<div class="span2">Tiempo Resp: <strong>{{service.response_time|default:"No Disp"}}</strong></div>
+	  	<div class="span2">Duración: <strong>{{service.duration|default:"No Disp"}}</strong></div>
+	  	
+	  	
 	</div>
 	
 	<div class="row">
@@ -59,23 +65,25 @@
 			</div>
 			
 		{%endif%}
-		<h5>Acompañantes</h5>
-		<div class="row">
-			{%for crew_member in vehicle.crew.all%}
-			 	<div class="span1 offset1">
-			 		{%if crew_member.picture%}
-						{% thumbnail crew_member.picture "70x70" crop="center" format="PNG"   as im %}
-							<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
-						{% endthumbnail %}
-					{%else%}
-						<a href="{% url 'perfil_f' ff_id=crew_member.id %}"><img width="70" height="70"  src="{{STATIC_URL}}img/no_photo_profile.png"/></a>
-					{%endif%}
-			 	</div>
-			 	<div class="span2">
-			 		<a href="{% url 'perfil_f' ff_id=crew_member.id %}">{{crew_member}}</a>
-			 	</div>
-			{% endfor %}
-		</div>
+		{%if vehicle.crew.count%}
+			<h5>Acompañantes</h5>
+			<div class="row">
+				{%for crew_member in vehicle.crew.all%}
+				 	<div class="span1 offset1">
+				 		{%if crew_member.picture%}
+							{% thumbnail crew_member.picture "70x70" crop="center" format="PNG"   as im %}
+								<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
+							{% endthumbnail %}
+						{%else%}
+							<a href="{% url 'perfil_f' ff_id=crew_member.id %}"><img width="70" height="70"  src="{{STATIC_URL}}img/no_photo_profile.png"/></a>
+						{%endif%}
+				 	</div>
+				 	<div class="span2">
+				 		<a href="{% url 'perfil_f' ff_id=crew_member.id %}">{{crew_member}}</a>
+				 	</div>
+				{% endfor %}
+			</div>
+		{%endif%}
 	</div>			
 	{% endfor %}
 	{%if service.affected.all%}
