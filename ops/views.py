@@ -32,7 +32,10 @@ def list_services(request):
 @login_required
 def view_service(request, service_id):
     service = Service.objects.get(id=service_id)
-    allow_file_upload = request.user.get_profile() in service.complete_crew()
+    try:
+        allow_file_upload = request.user.get_profile() in service.complete_crew()
+    except:
+        allow_file_upload = False
     data = {"service": service, 'allow_file_upload':allow_file_upload}
     
     if allow_file_upload:

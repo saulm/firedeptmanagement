@@ -91,13 +91,19 @@ class Service(models.Model):
     map_location = LocationField(verbose_name=u'Ubicación en Mapa', blank=True, max_length=255)
     
     def start_as_dt(self):
-        return datetime.combine(self.date, self.time)
+        if self.date and self.time:
+            return datetime.combine(self.date, self.time)
+        return None
     
     def arrival_as_dt(self):
-        return datetime.combine(self.scene_arrival_date, self.scene_arrival_time)
+        if self.scene_arrival_date and self.scene_arrival_time:
+            return datetime.combine(self.scene_arrival_date, self.scene_arrival_time)
+        return None
     
     def end_as_dt(self):
-        return datetime.combine(self.end_date, self.end_time)
+        if self.end_date and self.end_time:
+            return datetime.combine(self.end_date, self.end_time)
+        return None
     
     def response_time(self):
         try:
