@@ -121,6 +121,8 @@ class Service(models.Model):
         start = self.start_as_dt()
         scene_arrival = self.arrival_as_dt()
         end = self.end_as_dt()
+        if not start or not scene_arrival or not end:
+            raise ValidationError(u"Asegurate de insertar todas las fechas/horas")
         if not scene_arrival >= start:
             raise ValidationError(u"La fecha de llegada al sitio tiene que ser mayor o igual que la fecha de inicio")
         if not end > scene_arrival:

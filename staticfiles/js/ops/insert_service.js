@@ -282,6 +282,10 @@ function insert_service_ready(settings){
 	
 	$("input.datePicker").datepicker({"maxDate": 0});
 	$("input#id_time").mask("9999");
+	$("input#id_end_time").mask("9999");
+	$("input#id_scene_arrival_time").mask("9999");
+	
+	
 	
 	$('tabs_nav').click(function (e) {
   		e.preventDefault();
