@@ -25,7 +25,7 @@ def statistics(request):
     summary = Service.objects.filter(date__gt=date(year=2012, month=12, day=31)).extra({'month':truncate_month}).values('month', 'service_type').annotate(Count('service_type')).order_by('-month', 'service_type')
     services_by_month = SortedDict()
     for k, g in  groupby(summary, itemgetter('month')):
-        date_formatted = datetime.strptime(k.split(" ", 1)[0], '%Y-%m-%d').strftime("%Y-%m")
+        date_formatted = k.strftime("%Y-%m")
         total = 0
         for info in g:
             new_data= {"type":info['service_type'], 'count':info['service_type__count']}
