@@ -1,0 +1,93 @@
+{%extends "base_website.html" %}
+{% load thumbnail %}
+{%block extra_head%}
+	
+	 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	 	<script type="text/javascript" >
+	 		google.load("visualization", "1", {packages:["corechart"]});
+	 	</script>
+{%endblock%}
+{% block content %}
+<div class="row">
+	
+  	<div class="span10">
+  		<h1>Servicios por mes:</h1>
+  		{%for date, date_rows in services_by_month.iteritems%}
+  			<div class="row">
+  				<h2 style="text-align: center;">{{date}}</h2>
+		  		<div class="span3">
+					<table class="table">
+		  				<tbody>
+			  				{% for row in date_rows %}
+			  					{%if forloop.last%}
+			  						<tr><td><strong>{{row.type}}</strong></td><td><strong>{{row.count}}</strong></td></tr>
+	  							{%else%}
+	  								<tr><td>{{row.type}}</td><td>{{row.count}}</td></tr>
+	  							{%endif%}
+			  							
+			  				{% endfor %}
+		  				</tbody>
+		  			</table>
+		  		</div>
+			  	<div class="span4 graph_container" month="{{date}}">
+			  	</div>
+			  	<div class="span3 details_container" month="{{date}}">
+			  		<!-- <img src="{{STATIC_URL}}img/ajax_loader.gif" width="180" height="150"> -->
+			  		
+			  	</div>
+			</div>
+			<hr/>
+	  	{%endfor%}
+  	</div>
+  	<div class="span2">
+		<h2>Leyenda</h2>
+		<dl>
+			{%for def in type_legend%}
+				<dt>{{def.0}}:</dt>
+				<dd>{{def.1}}</dd>
+			{%endfor%}
+		</dl>
+	</div>			
+</div>	
+{%endblock%}
+{% block scripts%}
+	 {{ block.super }}
+	 {% block extra_scripts%}
+	 
+	 	<script type="text/javascript" >
+	      	google.setOnLoadCallback(drawMonthCharts);
+	 	
+	 		function drawMonthCharts() {
+	 			$("div.graph_container").each(function(){
+	 				var month = $(this).attr("month");
+	 				var url = "/estadisticas/"+month+"/";
+	 				var container = this;
+	 				$.getJSON(url, function(data) {
+	 					var table_data = google.visualization.arrayToDataTable(data["info"]);
+				        var options = {};
+				        var chart = new google.visualization.PieChart(container);
+				        chart.draw(table_data, options);
+	 				});
+	 			});
+	 			
+	 		}
+		        
+	 	
+			$(document).ready(function(){
+				$("div.details_container").each(function(){
+	 				var month = $(this).attr("month");
+	 				var url = "/estadisticas/detalle/"+month+"/";
+	 				var parent_container = $(this);
+	 				$.getJSON(url, function(data) {
+	 					var response_time = "<dt>Tiempo de Respuesta Promedio:</dt><dd>"+data["response_time"]+"</dd>";
+	 					var average_duration = "<dt>Duración Promedio de un Servicio:</dt><dd>"+data["average_duration"]+"</dd>";
+	 					var time_in_service = "<dt>Tiempo Total en Servicios:</dt><dd>"+data["time_in_service"]+"</dd>";
+	 					
+	 					parent_container.html("<dl>"+response_time+average_duration+time_in_service+"</dl>");	
+	 				});
+	 			});
+			});	
+		</script>
+	 
+	 {%endblock%}
+{%endblock%}

@@ -8,6 +8,10 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
                        url(r'^$', 'firedeptmanagement.frontpage.views.frontpage', name='frontpage'),
+                       url(r'estadisticas/$', 'firedeptmanagement.frontpage.views.statistics', name='statistics'),
+                       url(r'estadisticas/(?P<year>\d+)-(?P<month>\d+)/$', 'firedeptmanagement.frontpage.views.month_statistics', name='month_statistics'),
+                       url(r'estadisticas/detalle/(?P<year>\d+)-(?P<month>\d+)/$', 'firedeptmanagement.frontpage.views.month_statistics_detail', name='month_statistics_detail'),
+                       
                        url(r'^gestion/$', 'firedeptmanagement.common.views.base', name='base'),
                        url(r'^gestion/static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': MEDIA_ROOT}),
                        url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
@@ -39,7 +43,7 @@ urlpatterns = patterns('',
                        
                        url(r'^gestion/personas/autocompletar/$', 'firedeptmanagement.common.views.autocomplete_person', name="autocomplete_person"),
                        url(r'^gestion/bomberos/autocompletar/$', 'firedeptmanagement.personal.views.autocomplete_firefighter', name="autocomplete_firefighter"),
-
+                       
                        #ADMIN
                        (r'^gestion/admin/', include(admin.site.urls)),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

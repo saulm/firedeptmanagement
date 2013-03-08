@@ -1,112 +1,6 @@
+{%extends "base_website.html" %}
 {% load thumbnail %}
-<!doctype html>
-<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
-<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
-<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
-<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
-<!-- Consider adding a manifest.appcache: h5bp.com/d/Offline -->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-
-  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
-       More info: h5bp.com/i/378 -->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
-  <title>Cuerpo de Bomberos Voluntarios Universidad Simón Bolívar</title>
-  <meta name="description" content="Sitio Web del CBVUSB, una organización voluntaria que atiende servicios de incendio, atención médica de emergencia, rescate y procedimientos con materiales peligrosos en la Universidad Simón Bolívar y las zonas aledañas.">
-  <meta name="keywords" content="Bomberos,  Bombero, Voluntario, Voluntarios, Universidad, Simon, Bolivar, incendio, rescate, matpel, materiales peligrosos, cursos, primeros auxilios, extintores">
-
-  <!-- Mobile viewport optimized: h5bp.com/viewport -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
-
-  <link rel="stylesheet" href="{{STATIC_URL}}css/style.css">
-  <link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.css">
-  <link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>
-  
-
-  <!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
-
-  <!-- All JavaScript at the bottom, except this Modernizr build.
-       Modernizr enables HTML5 elements & feature detects for optimal performance.
-       Create your own custom Modernizr build: www.modernizr.com/download/ -->
-  <script src="{{STATIC_URL}}js/libs/modernizr-2.5.3.min.js"></script>
-  
-</head>
-<body>
-  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.
-       chromium.org/developers/how-tos/chrome-frame-getting-started -->
-  <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
-  <header>
-	<div class="container">
-		<div class="row header">
-			<div class="span2">
-				<a href="{% url 'frontpage' %}" title="Regresar al inicio" id="logo">
-	  				<img src="{{STATIC_URL}}img/logo_top.gif" alt="Logo CBVUSB" width="170px" />
-				</a>
-			</div>
-	  		<div class="span8">
-	  			<hgroup id="site_header">
-					<h1>Cuerpo de Bomberos Voluntarios</h1>
-					<h2>UNIVERSIDAD SIMÓN BOLÍVAR</h2>
-					<h3>Disciplina - Estudio - Excelencia</h3>
-					
-				</hgroup>	
-	  		</div>
-	  		<div class="span2 phones">
-				<h4>Emergencias:</h4>
-				<dl>
-					<dt>En la Simón</dt><dd><a href="tel:+582129063909">(0212) 906-3909</a></dd>
-				</dl>
-				<div class="row">
-					<div class="span1">
-						<dl>
-							<dt>Movistar</dt><dd><a href="tel:911">911</a></dd>
-							<dt>Digitel</dt><dd><a href="tel:112">112</a></dd>
-						</dl>
-					</div>
-					<div class="span1">
-						<dl>
-							<dt>Movilnet</dt><dd><a href="tel:*1">*1</a></dd>
-						</dl>
-					</div>
-				</div>
-			</div>	
-		</div>
-	</div>
-  </header>
-  <nav>
-  	<div class="navbar ">
-  		<div class="navbar-inner">
-    		<div class="container">
-      			<ul class="nav">
-					<li class="active">
-						<a href="{% url 'frontpage' %}">Inicio</a>
-					</li>
- 					<li>
-						<a href="http://bomberos.usb.ve/gallery">Fotos</a>
-					</li>
-				</ul>
-				<ul class="nav pull-right">
-					<li class="divider-vertical"></li>
-					<li class="dropdown">
-		            	<a href="#" class="dropdown-toggle" data-toggle="dropdown">Miembros <b class="caret"></b></a>
-		              	<ul class="dropdown-menu">
-		                	<li ><a  href="https://bomberos.usb.ve/firemail">Email</a></li>
-		                	<li><a href="https://bomberos.usb.ve/confluence">Confluence</a></li>
-		                	<li><a href="{%url 'base' %}" >Sistema de Gestión</a></li>
-		                	<li><a href="http://bomberos.usb.ve/inventario" >Sistema de Inventario</a></li>
-		                	
-		              	</ul>
-					</li>
-				</ul>
-    		</div>
-  		</div>
-	</div>
-  </nav>
-  <div role="main" class="container">
+{% block content %}
   	<div class="row">
   		<div class="span3" >
 			
@@ -125,7 +19,6 @@
 								<p>
 									En este curso aprenderás todo lo que necesitas saber para iniciar la atención primaria de una emergencia médica y mantenerla hasta la llegada de ayuda especializada.
 								</p> 
-<!-- 								<p style="text-align: right;"><a class="btn btn-small btn-info" href="#"><i class="icon-info-sign icon-white"></i> + Información</a></p> -->
 							</div>
 						</div>
 					</div>
@@ -216,17 +109,7 @@
 							Capacitamos a la comunidad universitaria y comunidades aledañas a la Universidad en Primeros Auxilios, Uso y Manejo de Extintores, Trabajo en Altura, entre otros. 
 						</p>
 					</div>
-				</div>
-				<!-- <div class="item ">
-					<img src="img/carr_01.jpg" alt="">
-					<div class="carousel-caption">
-						<h4>Somos una organización voluntaria</h4>
-						<p>
-							que atiende servicios de incendio, atención médica de emergencia, rescate y procedimientos con materiales peligrosos en la Universidad Simón Bolívar y las zonas aledañas.
-						</p>
-					</div>
-				</div> -->
-				
+				</div>	
 			  </div>
   					<a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
   					<a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
@@ -238,101 +121,75 @@
 						<div class="span1 ff_picture"><img  src="{{im.url}}" width="{{im.width}}" height="{{im.height}}"  /><p>{{ff}}</p></div>
 					{% endthumbnail %}
 				{%endfor%}
-				
-<!-- 				<div class="span1 ff_picture"><img  src="{{STATIC_URL}}img/no_photo_profile.png"/><p><a>Tú puedes estar aquí!</a></p></div> -->
-				
-				
 			</div>
 			
 		</div>
   	</div>
-  		
-  </div>
-  <footer>
-  	<div class="container">
-	  	<div class="row">
-	  		<div  class="span8 fb-like offset2" data-href="http://www.facebook.com/cbvusb" data-send="true" data-width="800" data-show-faces="true" data-colorscheme="dark" data-font="tahoma"></div>
-	  		<div class="span12">
-	  			<p>Sartenejas, Baruta, Edo. Miranda - Apartado 89000</p> 
-				<p>Universidad Simón Bolívar, Pabellón 1</p>
-				<p><a href="mailto:contacto@bomberos.usb.ve">contacto@bomberos.usb.ve</a></p>
-			</div>
-		</div>
-	</div>
-  </footer>
-  
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <script>window.jQuery || document.write('<script src="{{STATIC_URL}}js/libs/jquery-1.7.1.min.js"><\/script>')</script>
-  <script charset="utf-8" src="http://widgets.twimg.com/j/2/widget.js"></script>
-  
-  <!-- scripts concatenated and minified via build script -->
-  <script src="{{STATIC_URL}}js/libs/plugins.js"></script>
-  <script src="{{STATIC_URL}}js/libs/bootstrap-transition.js"></script>
-  <script src="{{STATIC_URL}}js/libs/bootstrap-carousel.js"></script>
-  <script src="{{STATIC_URL}}js/libs/bootstrap-collapse.js"></script>
-  <script src="{{STATIC_URL}}js/libs/bootstrap-dropdown.js"></script>
-  <!-- end scripts -->
-
-  <!-- Asynchronous Google Analytics snippet. Change UA-XXXXX-X to be your site's ID.
-       mathiasbynens.be/notes/async-analytics-snippet -->
-  <script>
-	  
-
-   $(document).ready(function(){
-	   	$('.carousel').carousel();
-
-	    new TWTR.Widget({
-	    				id: "twitter_widget",
-					  version: 2,
-					  type: 'profile',
-					  interval: 30000,
-					  width: 'auto',
-					  height: 400,
-					  theme: {
-					    shell: {
-					      background: '#2C2C2C',
-					      color: '#ffffff'
-					    },
-					    tweets: {
-					      background: '#ffffff',
-					      color: '#000000',
-					      links: '#08c'
-					    }
-					  },
-					  features: {
-					    scrollbar: false,
-					    loop: false,
-					    live: true,
-					    behavior: 'all'
-					  }
-					}).render().setUser('bomberosusb').start();
-	   	
-	   $(".collapse").collapse({parent:"#accordion_cursos"});
-   		if($(window).width() < 800){
-   			$("div.fb-like").attr('data-width', $(window).width()*0.6);
-   		}
-   		
-	   (function(d, s, id) {
-		  var js, fjs = d.getElementsByTagName(s)[0];
-		  if (d.getElementById(id)) return;
-		  js = d.createElement(s); js.id = id;
-		  js.src = "http://connect.facebook.net/en_US/all.js#xfbml=1";
-		  fjs.parentNode.insertBefore(js, fjs);
-		}(document, 'script', 'facebook-jssdk'));
-	   
-	   var _gaq = _gaq || [];
-	  _gaq.push(['_setAccount', 'XXXXXXXXXx']);
-	  _gaq.push(['_trackPageview']);
-	
-	  (function() {
-	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	  })();
-   
-   });
-   
-   
-  </script>
-</body>
-</html>
+{%endblock%}
+ {% block scripts%}
+	 {{ block.super }}
+	 {% block extra_scripts%}
+	 	<script charset="utf-8" src="http://widgets.twimg.com/j/2/widget.js"></script>
+	    <script src="{{STATIC_URL}}js/libs/plugins.js"></script>
+	    <script src="{{STATIC_URL}}js/libs/bootstrap-transition.js"></script>
+	    <script src="{{STATIC_URL}}js/libs/bootstrap-carousel.js"></script>
+	    <script src="{{STATIC_URL}}js/libs/bootstrap-collapse.js"></script>
+	    <script src="{{STATIC_URL}}js/libs/bootstrap-dropdown.js"></script>
+		
+	  	<script>
+		   $(document).ready(function(){
+			   	$('.carousel').carousel();
+		
+			    new TWTR.Widget({
+			    				id: "twitter_widget",
+							  version: 2,
+							  type: 'profile',
+							  interval: 30000,
+							  width: 'auto',
+							  height: 400,
+							  theme: {
+							    shell: {
+							      background: '#2C2C2C',
+							      color: '#ffffff'
+							    },
+							    tweets: {
+							      background: '#ffffff',
+							      color: '#000000',
+							      links: '#08c'
+							    }
+							  },
+							  features: {
+							    scrollbar: false,
+							    loop: false,
+							    live: true,
+							    behavior: 'all'
+							  }
+							}).render().setUser('bomberosusb').start();
+			   	
+			   $(".collapse").collapse({parent:"#accordion_cursos"});
+		   		if($(window).width() < 800){
+		   			$("div.fb-like").attr('data-width', $(window).width()*0.6);
+		   		}
+		   		
+			   (function(d, s, id) {
+				  var js, fjs = d.getElementsByTagName(s)[0];
+				  if (d.getElementById(id)) return;
+				  js = d.createElement(s); js.id = id;
+				  js.src = "http://connect.facebook.net/en_US/all.js#xfbml=1";
+				  fjs.parentNode.insertBefore(js, fjs);
+				}(document, 'script', 'facebook-jssdk'));
+			   
+			   var _gaq = _gaq || [];
+			  _gaq.push(['_setAccount', 'XXXXXXXXXx']);
+			  _gaq.push(['_trackPageview']);
+			
+			  (function() {
+			    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			  })();
+		   
+		   });
+		  </script>
+	  {%endblock%}
+	{%endblock%}
