@@ -77,7 +77,8 @@
 					
 				</div>
 			</div>
-			<div id="twitter_widget"></div>
+			<a class="twitter-timeline" href="https://twitter.com/BomberosUSB" data-widget-id="311599991057682432">Tweets by @BomberosUSB</a>
+			<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
   		</div>
 		<div class="span9">
 			<div id="myCarousel" class="carousel" >
@@ -129,42 +130,14 @@
  {% block scripts%}
 	 {{ block.super }}
 	 {% block extra_scripts%}
-	 	<script charset="utf-8" src="http://widgets.twimg.com/j/2/widget.js"></script>
 	    <script src="{{STATIC_URL}}js/libs/plugins.js"></script>
 	    <script src="{{STATIC_URL}}js/libs/bootstrap-transition.js"></script>
 	    <script src="{{STATIC_URL}}js/libs/bootstrap-carousel.js"></script>
 	    <script src="{{STATIC_URL}}js/libs/bootstrap-collapse.js"></script>
-	    <script src="{{STATIC_URL}}js/libs/bootstrap-dropdown.js"></script>
-		
+	    		
 	  	<script>
 		   $(document).ready(function(){
 			   	$('.carousel').carousel();
-		
-			    new TWTR.Widget({
-			    				id: "twitter_widget",
-							  version: 2,
-							  type: 'profile',
-							  interval: 30000,
-							  width: 'auto',
-							  height: 400,
-							  theme: {
-							    shell: {
-							      background: '#2C2C2C',
-							      color: '#ffffff'
-							    },
-							    tweets: {
-							      background: '#ffffff',
-							      color: '#000000',
-							      links: '#08c'
-							    }
-							  },
-							  features: {
-							    scrollbar: false,
-							    loop: false,
-							    live: true,
-							    behavior: 'all'
-							  }
-							}).render().setUser('bomberosusb').start();
 			   	
 			   $(".collapse").collapse({parent:"#accordion_cursos"});
 		   		if($(window).width() < 800){
