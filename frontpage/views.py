@@ -35,7 +35,7 @@ def statistics(request):
                 services_by_month[date_formatted] = []
             services_by_month[date_formatted].append(new_data)
         services_by_month[date_formatted].append({"type":"Total:", 'count':total})
-    data = {'services_by_month': services_by_month, 'type_legend': Service.SERVICE_TYPE_CHOICES}
+    data = {'services_by_month': services_by_month, 'type_legend': Service.SERVICE_TYPE_CHOICES, 'ga': settings.GA}
     return render_to_response('statistics.html', RequestContext(request, data))
 
 
