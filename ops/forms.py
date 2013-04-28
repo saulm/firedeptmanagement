@@ -65,7 +65,7 @@ class AffectedForm(ModelForm):
 
     class Meta:
         model = BasePerson
-        exclude = ('alternate_email')
+        exclude = ('alternate_email',)
         fields = ('id_document', 'first_name', 'first_name_2', 'last_name',
                   'last_name_2', 'gender', 'primary_email', 'phone_code',
                   'phone_number', 'notes')

@@ -88,7 +88,7 @@ class Firefighter(Person):
         send_welcome_email(str(self), username, new_password, self.alternate_email)
         
     def total_valid_arrests(self):
-        minutes = self.arrests.filter(approved_by_ops=True).aggregate(Sum('minutes'))['minutes__sum']
+        minutes = self.arrests.filter(approved_by_ops=True, approved_by_inspector=True).aggregate(Sum('minutes'))['minutes__sum']
         return minutes if minutes else 0
     
     def total_valid_arrests_payments(self):

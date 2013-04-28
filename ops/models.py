@@ -171,7 +171,8 @@ class Arrest(models.Model):
     time = models.IntegerField(verbose_name=u'Minutos de ausencia', validators=[MinValueValidator(0)])
     minutes = models.IntegerField(verbose_name=u'Minutos de arresto', editable=False, validators=[MinValueValidator(0)])
     approved_by_ops = models.BooleanField(default=False, verbose_name=u"Aprobado por Operaciones")
-    
+    approved_by_inspector = models.BooleanField(default=False, verbose_name=u"Aprobado por el Inspector")
+
     def save(self, *args, **kwargs):
         self.minutes = self.time*1.5 if self.was_notified else self.time*2
         super(Arrest, self).save(*args, **kwargs)
@@ -184,7 +185,7 @@ def notify_arrested(sender, instance, created, **kwargs):
     logger.info("Sending Arrest Email")
     if created:
         subject = u"Nuevo Arresto"
-        content = u"%s te ha insertado un nuevo arresto:\n\n%s\n\n%s, este debe ser aprobado por operaciones para ser actualizado en tus arrestos" % (unicode(instance.created_by), unicode(instance), unicode(instance.description))
+        content = u"%s te ha insertado un nuevo arresto:\n\n%s\n\n%s, este debe ser aprobado por operaciones  e Inspectoria para ser actualizado en tus arrestos" % (unicode(instance.created_by), unicode(instance), unicode(instance.description))
         send_mail(subject, content, settings.DEFAULT_FROM_EMAIL, [instance.arrested.primary_email,], fail_silently=True)
     else:
         subject = u"Actualización Arrestos"

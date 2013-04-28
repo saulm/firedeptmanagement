@@ -56,19 +56,19 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.messages',    
     'django.contrib.sites',
-    'django.contrib.messages',
+    'django.contrib.staticfiles',    
     'firedeptmanagement.common',
     'firedeptmanagement.personal',
     'firedeptmanagement.capitalrelacional',
     'firedeptmanagement.frontpage',
     'ops',
-    'opera',
-    'django.contrib.admin',
-    'django.contrib.staticfiles',
+    #'opera',
     'south',
     'sorl.thumbnail',
     'bootstrap_toolkit'
