@@ -77,7 +77,7 @@ class Firefighter(Person):
         conn = ldap_c.initialize(django_settings.AUTH_LDAP_SERVER_URI)
         conn.simple_bind_s(django_settings.AUTH_LDAP_BIND_DN, django_settings.AUTH_LDAP_BIND_PASSWORD)
         
-        for opt, value in ldap_settings.AUTH_LDAP_CONNECTION_OPTIONS.iteritems():
+        for opt, value in ldap_settings.CONNECTION_OPTIONS.iteritems():
             conn.set_option(opt, value)
         
         new_password = get_pronounceable_password() if not password else password
