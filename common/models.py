@@ -118,8 +118,8 @@ class BasePerson(models.Model):
     last_name_2 = models.CharField(verbose_name=u'Segundo Apellido', max_length=100, null=True, blank=True)
     id_document = models.CharField(verbose_name=u'Cédula', max_length=10, null=True, blank=True)
     gender = models.CharField(verbose_name=u'Sexo', max_length=2, choices=GENDER_CHOICES, null=True, blank=True)
-    primary_email = models.EmailField(null=True, blank=True, verbose_name='Email Principal')
-    alternate_email = models.EmailField(null=True, blank=True, verbose_name='Email Alterno')
+    primary_email = models.EmailField(null=True, blank=True, verbose_name='Email Principal', help_text=u'Si es bombero aqui va el email de bombero')
+    alternate_email = models.EmailField(null=True, blank=True, verbose_name='Email Alterno', help_text=u'Si es bombero aqui va su email personal')
 
     def __unicode__(self):
         return u"%s %s" % (self.first_name, self.last_name)

@@ -15,7 +15,7 @@ from local_settings import send_welcome_email
 from local_settings import send_webmaster_email
 from django.conf import settings
 from datetime import date
-
+import unidecode
 
 class Rank(models.Model):
     name = models.CharField(max_length=30)
@@ -50,7 +50,7 @@ class Firefighter(Person):
     blood_type = models.CharField(max_length=2, choices=BLOOD_TYPE_CHOICES, null=True, blank=True, verbose_name=u'Factor Sanguineo')
     blood_type_rh = models.CharField(max_length=1, choices=BLOOD_RH_CHOICES, null=True, blank=True, verbose_name=u'RH')
     initials = models.CharField(max_length=4, null=True, blank=True, verbose_name=u'Iniciales')
-    number = models.SmallIntegerField(null=True, blank=True, verbose_name=u'Número de Carnet')
+    number = models.SmallIntegerField(null=True, blank=True, verbose_name=u'Carnet de Bombero')
     ranks = models.ManyToManyField(Rank, through="RankChange", null=True, verbose_name=u'Rangos')
     profile_picture = ImageField(upload_to="images/firefighter/", null=True, blank=True, verbose_name='Foto de Perfil')
     
@@ -217,7 +217,7 @@ if django_settings.AUTH_LDAP_BIND_PASSWORD:
     @receiver(post_save, sender=Firefighter)
     def create_ldap_user(sender, instance, created, **kwargs):
         username = instance.first_name[0] + "".join(instance.last_name.split(" "))
-        username = unicode(username.lower())
+        username = unidecode.unidecode(username.lower())
         
         if not created or User.objects.filter(username=username).count():
             return
@@ -252,14 +252,14 @@ if django_settings.AUTH_LDAP_BIND_PASSWORD:
                     ('homeDirectory', str('/home/') + str(username) + '/'),
                     ('loginShell', str('/bin/bash')),
                     ('userPassword', makeSecret(new_password)),
-                    ('mail', str(username) + str("@bomberos.usb.ve")),
+                    ('mail', username+"@bomberos.usb.ve"),
                     ]
 
         try:
-            conn.add_s('uid=' + str(username) + ',ou=users,dc=bomberos,dc=usb,dc=ve', new_user)
+            conn.add_s('uid=' + username + ',ou=users,dc=bomberos,dc=usb,dc=ve', new_user)
         except:
             pass
-        mod_attrs = [(ldap_c.MOD_ADD, 'memberUid', str(username))]
+        mod_attrs = [(ldap_c.MOD_ADD, 'memberUid', username)]
         try:
             conn.modify_s('cn=cbvusb,ou=groups,dc=bomberos,dc=usb,dc=ve', mod_attrs)
         except:

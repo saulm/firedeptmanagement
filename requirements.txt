@@ -5,6 +5,7 @@ PIL==1.1.7
 South==0.7.6
 sorl-thumbnail
 django-bootstrap-toolkit
+unidecode
 
 # To use opera
- MySQL-python 
+MySQL-python 
