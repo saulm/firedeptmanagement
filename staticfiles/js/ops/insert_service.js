@@ -23,8 +23,8 @@ function fill_patient_form($form, data){
 }
 
 function set_vehicle_form_behavior(settings){
-	var static_url = settings["static_url"];
-	
+    var static_url = settings["static_url"];
+    var ff_autocomplete_url = settings["ff_autocomplete_url"];
 	
 	$("a.delete_vehicle").click(function(){
 		$(this).parent().remove();
@@ -55,7 +55,7 @@ function set_vehicle_form_behavior(settings){
 		source: function( request, response ) {
 			var element = this.element;
 			$.ajax({
-				url: "/gestion/bomberos/autocompletar/",
+				url: ff_autocomplete_url,
 				dataType: "json",
 				data: {
 					term: request.term
@@ -88,7 +88,7 @@ function set_vehicle_form_behavior(settings){
 		source: function( request, response ) {
 			var element = this.element;
 			$.ajax({
-				url: "/gestion/bomberos/autocompletar/",
+				url: ff_autocomplete_url,
 				dataType: "json",
 				data: {
 					term: request.term
@@ -118,7 +118,7 @@ function set_vehicle_form_behavior(settings){
 	$("input[name$='crew_select']").autocomplete({
 		source: function( request, response ) {
 			$.ajax({
-				url: "/gestion/bomberos/autocompletar/",
+				url: ff_autocomplete_url,
 				dataType: "json",
 				data: {
 					term: request.term
@@ -153,7 +153,8 @@ function set_vehicle_form_behavior(settings){
 	});
 }
 
-function set_affected_form_behavior(){
+function set_affected_form_behavior(settings){
+    var person_autocomplete_url = settings["person_autocomplete_url"];
 	$("a.delete_patient").click(function(){
 			$(this).parent().remove();
 			var total_forms = parseInt($("div#patients_forms input#id_form-TOTAL_FORMS").val()) - 1;
@@ -164,7 +165,7 @@ function set_affected_form_behavior(){
 		$("input[name$='id_document']").autocomplete({
 			source: function( request, response ) {
 				$.ajax({
-					url: "/gestion/personas/autocompletar/",
+					url: person_autocomplete_url,
 					dataType: "json",
 					data: {
 						term: request.term
@@ -293,7 +294,7 @@ function insert_service_ready(settings){
 	});
 	
 	set_vehicle_form_behavior(settings);
-	set_affected_form_behavior();
+	set_affected_form_behavior(settings);
 	fill_crews(settings);
 	
 	$("a#add_patient").click(function(){

@@ -66,7 +66,6 @@ INSTALLED_APPS = (
     'firedeptmanagement.common',
     'firedeptmanagement.personal',
     'firedeptmanagement.capitalrelacional',
-    'firedeptmanagement.frontpage',
     'ops',
     #'opera',
     'south',
@@ -80,7 +79,7 @@ MEDIA_URL = '/media/'
 LOGIN_URL = "/login/"
 LOGOUT_URL = "/logout/"
 
-LOGIN_REDIRECT_URL = "/gestion/"
+LOGIN_REDIRECT_URL = "/"
 
 STATICFILES_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), './staticfiles/')
 STATIC_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), './static/')

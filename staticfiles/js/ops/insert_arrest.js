@@ -1,10 +1,11 @@
 function insert_arrest_ready(){
+    var ff_autocomplete_url = settings["ff_autocomplete_url"];
 	$("input.datePicker").datepicker({"maxDate": 0});
 	$("input[name$='arrested_select']").autocomplete({
 		source: function( request, response ) {
 			var element = this.element;
 			$.ajax({
-				url: "/gestion/bomberos/autocompletar/",
+				url: ff_autocomplete_url,
 				dataType: "json",
 				data: {
 					term: request.term
@@ -28,7 +29,8 @@ function insert_arrest_ready(){
 	});
 }
 
-function insert_arrest_payment_ready(){
+function insert_arrest_payment_ready(settings){
+    var ff_autocomplete_url = settings["ff_autocomplete_url"];
 	$("input#id_start_time_time").mask("9999");
 	$("input#id_end_time_time").mask("9999");
 	$("input#id_start_time_date").datepicker({"maxDate": 0});
@@ -38,7 +40,7 @@ function insert_arrest_payment_ready(){
 		source: function( request, response ) {
 			var element = this.element;
 			$.ajax({
-				url: "/gestion/bomberos/autocompletar/",
+				url: ff_autocomplete_url,
 				dataType: "json",
 				data: {
 					term: request.term

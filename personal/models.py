@@ -52,7 +52,7 @@ class Firefighter(Person):
     initials = models.CharField(max_length=4, null=True, blank=True, verbose_name=u'Iniciales')
     number = models.SmallIntegerField(null=True, blank=True, verbose_name=u'Carnet de Bombero')
     ranks = models.ManyToManyField(Rank, through="RankChange", null=True, verbose_name=u'Rangos')
-    profile_picture = ImageField(upload_to="images/firefighter/", null=True, blank=True, verbose_name='Foto de Perfil')
+    profile_picture = ImageField(upload_to="images/firefighter/", null=True, blank=True, verbose_name='Foto de Perfil', help_text=u"Asegurate de que el nombre del archivo no contenga acentos o eñes")
     
     @classmethod
     def search(cls, text):

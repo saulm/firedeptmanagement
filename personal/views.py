@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from utils.serialization import get_values
 import json
-
+from sorl.thumbnail import get_thumbnail
 
 @login_required
 def user_profile(request, ff_id=None):
@@ -27,7 +27,6 @@ def view_cnb_form(request, ff_id):
     firefighter = Firefighter.objects.get(id=ff_id)
     params = {"ff": firefighter}
     return render_to_response("planilla_cnb.html", RequestContext(request, params))
-
 
 @login_required
 def change_profile_get(request):
@@ -73,7 +72,7 @@ def change_phone(request):
             messages.success(request, u'Los cambios fueron guardados exitosamente')
             form.save(firefighter)
         else:
-            messages.error(request, u'Existen errores en el formulario, chequea que estes usando el formato correcto (código: 0212, número: 1231212)')
+            messages.error(request, u'Existen errores en el formulario, chequea que estes usando el formato correcto (c&oacute;digo: 0212, n&uacute;mero: 1231212)')
     return redirect(change_profile_get)
 
 
@@ -89,3 +88,11 @@ def autocomplete_firefighter(request):
     term = request.GET.get("term", "")
     ffs = Firefighter.search(term)
     return HttpResponse(json.dumps([get_values(x) for x in ffs]))
+
+def ff_sample(request):
+    ffs =  [x for x in Firefighter.objects.all() if x.is_active()  and x.profile_picture and x.number][:24]
+    data = []
+    for ff in ffs:
+       im = get_thumbnail(ff.profile_picture, '70x70', crop='center', format='PNG')
+       data.append({"name": str(ff), "im": {"url": im.url, "width": im.width, "height":im.height}})
+    return HttpResponse(json.dumps(data))

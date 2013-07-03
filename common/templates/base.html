@@ -19,9 +19,14 @@
 	<link rel="stylesheet" href="{{STATIC_URL}}css/style.css" type="text/css" media="screen" />
 	<link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/base/jquery-ui.css" type="text/css" />
-  	{% block extrahead %}{{ block.super }}
+  	<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+        <script type="text/javascript">
+	 		google.load("visualization", "1", {packages:["corechart"]});
+	 	</script>
+        {% block extrahead %}{{ block.super }}
 		{{ media }}
 	{% endblock %}
+        
   	<!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
 
   	<!-- All JavaScript at the bottom, except this Modernizr build.
@@ -63,8 +68,12 @@
 					   	<ul class="dropdown-menu">
 							<li><a href="{% url 'insert_service' %}">Insertar Servicio</a></li>
 							<li><a href="{% url 'list_services' %}">Ver Servicios</a></li>	
-							<li><a href="{% url 'insert_arrest' %}">Insertar Arresto</a></li>
-							<li><a href="{% url 'insert_arrest_payment' %}">Insertar Pago de Arresto</a></li>
+							<li><a
+                                                                href="{%  url 'insert_arrest' %}">Insertar Arresto</a></li>
+							<li><a
+                                                                href="{% url 'insert_arrest_payment' %}">Insertar Pago de Arresto</a></li>
+                                                        <li><a href="{%	url 'statistics'%}">Estadísticas</a></li>
+                                                        
 					    </ul>
 					</li>
 					<li class="dropdown">

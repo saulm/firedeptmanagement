@@ -13,6 +13,10 @@
  	{{block.super}}
  	<script src="{{STATIC_URL}}js/ops/insert_arrest.js"></script>
 	<script type="text/javascript" >
-		$(document).ready(insert_arrest_ready());
+	  $(document).ready(insert_arrest_ready(
+          {
+          'ff_autocomplete_url': "{%url 'autocomplete_firefighter' %}"
+	  }
+          ));
 	</script>
 {%endblock%}

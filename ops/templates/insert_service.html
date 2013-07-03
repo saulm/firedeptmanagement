@@ -63,13 +63,15 @@
 	<script src="{{STATIC_URL}}js/libs/jquery.maskedinput-1.3.min.js"></script>
 	<script src="{{STATIC_URL}}js/ops/insert_service.js"></script>
 	<script type="text/javascript" >
-		$(document).ready(insert_service_ready(
-			{
-				'static_url': '{{STATIC_URL}}',
-				'default_affected_form':'{{affected.empty_form|as_bootstrap|escapejs}}',
-				'default_vehicle_form':'{{vehicles.empty_form|as_bootstrap|escapejs}}',
-				'crew_data':'{{crew_data|escapejs}}'
-			}
-		));	
+	  $(document).ready(insert_service_ready(
+	  {
+	  'static_url': '{{STATIC_URL}}',
+          'ff_autocomplete_url': "{%url 'autocomplete_firefighter' %}",
+          'person_autocomplete_url': "{%url 'autocomplete_person' %}",
+	  'default_affected_form':'{{affected.empty_form|as_bootstrap|escapejs}}',
+	  'default_vehicle_form':'{{vehicles.empty_form|as_bootstrap|escapejs}}',
+	  'crew_data':'{{crew_data|escapejs}}'
+	  }
+	  ));	
 	</script>
 {%endblock%}

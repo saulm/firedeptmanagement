@@ -1,8 +1,8 @@
-{%extends "base_website.html" %}
+{%extends "base.html" %}
 {% load thumbnail %}
 {%block extra_head%}
 	
-	 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	 	<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 	 	<script type="text/javascript" >
 	 		google.load("visualization", "1", {packages:["corechart"]});
 	 	</script>
@@ -60,7 +60,7 @@
 	 		function drawMonthCharts() {
 	 			$("div.graph_container").each(function(){
 	 				var month = $(this).attr("month");
-	 				var url = "/estadisticas/"+month+"/";
+	 				var url = month+"/";
 	 				var container = this;
 	 				$.getJSON(url, function(data) {
 	 					var table_data = google.visualization.arrayToDataTable(data["info"]);
@@ -76,7 +76,7 @@
 			$(document).ready(function(){
 				$("div.details_container").each(function(){
 	 				var month = $(this).attr("month");
-	 				var url = "/estadisticas/detalle/"+month+"/";
+	 				var url = "detalle/"+month+"/";
 	 				var parent_container = $(this);
 	 				$.getJSON(url, function(data) {
 	 					var response_time = "<dt>Tiempo de Respuesta Promedio:</dt><dd>"+data["response_time"]+"</dd>";
