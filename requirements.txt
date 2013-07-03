@@ -1,6 +1,6 @@
 -e git+https://github.com/django/django.git#egg=django
 python-ldap==2.4.3
-django-auth-ldap==1.1
+-e git+https://github.com/saulm/django-auth-ldap.git#egg=django-auth-ldap
 PIL==1.1.7
 South==0.7.6
 -e git+https://github.com/saulm/sorl-thumbnail.git#egg=sorl-thumbnail
