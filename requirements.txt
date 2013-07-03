@@ -3,7 +3,7 @@ python-ldap==2.4.3
 django-auth-ldap==1.1
 PIL==1.1.7
 South==0.7.6
-sorl-thumbnail
+-e git+https://github.com/saulm/sorl-thumbnail.git#egg=sorl-thumbnail
 django-bootstrap-toolkit
 unidecode
 
