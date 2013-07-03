@@ -1,7 +1,8 @@
--e git+https://github.com/django/django.git#egg=django
+#-e git+https://github.com/django/django.git#egg=django
+django==1.5
 python-ldap==2.4.3
 -e git+https://github.com/saulm/django-auth-ldap.git#egg=django-auth-ldap
-PIL==1.1.7
+pillow  
 South==0.7.6
 -e git+https://github.com/saulm/sorl-thumbnail.git#egg=sorl-thumbnail
 django-bootstrap-toolkit
