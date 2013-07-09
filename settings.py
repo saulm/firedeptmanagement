@@ -1,3 +1,4 @@
+#coding=utf-8
 import os
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -73,6 +74,15 @@ INSTALLED_APPS = (
     'bootstrap_toolkit'
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
+                               "django.core.context_processors.debug",
+                               "django.core.context_processors.i18n",
+                               "django.core.context_processors.media",
+                               "django.core.context_processors.static",
+                               "django.core.context_processors.tz",
+                               "django.contrib.messages.context_processors.messages",
+                               "firedeptmanagement.common.context_processors.config_media")
+
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, '../media/')
 MEDIA_URL = '/media/'
 
@@ -97,8 +107,10 @@ AUTHENTICATION_BACKENDS = (
 AUTH_PROFILE_MODULE = "personal.Firefighter"
 THUMBNAIL_DEBUG = True
 DEFAULT_CHARSET = 'utf-8'
-#Google Analytics
-GA = ""
+
+SITE_HEADER= u"<hgroup id='site_header'><h1>Cuerpo de Bomberos Voluntarios</h1><h2>UNIVERSIDAD SIMÓN BOLÍVAR</h2><h3>Disciplina - Estudio - Excelencia</h3></hgroup>"
+
+LOGO_URL="img/logo_top.gif"
 
 def send_webmaster_email(username):
     pass
