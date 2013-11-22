@@ -97,7 +97,9 @@ class Firefighter(Person):
     
     def total_arrests(self):
         return self.total_valid_arrests() - self.total_valid_arrests_payments()
-    
+
+    total_arrests.short_description = 'Minutos de Arresto'
+
     def current_condition_change(self):
         condition_changes =  self.condition_changes.all().select_related('condition').order_by("-date")
         return condition_changes[0] if condition_changes.count() else None
