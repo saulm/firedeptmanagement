@@ -37,7 +37,7 @@ class ServiceImageForm(forms.Form):
 class ServiceVehicleForm(forms.Form):
     lead_select = forms.CharField(label=u'Jefe de Comisión', required=True,
                                   help_text=u"Asegurate de Seleccionar el Jefe de la lista que se despliega!")
-    vehicle = forms.ModelChoiceField(queryset=Vehicle.objects.all(),
+    vehicle = forms.ModelChoiceField(queryset=Vehicle.objects.filter(active=True),
                                      label="Unidad",
                                      help_text=u"No selecciones nada si la comisión fue sin unidad",
                                      required=False)
