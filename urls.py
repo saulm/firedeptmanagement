@@ -43,6 +43,7 @@ urlpatterns = patterns('',
                        
                        url(r'^personas/autocompletar/$', 'firedeptmanagement.common.views.autocomplete_person', name="autocomplete_person"),
                        url(r'^bomberos/autocompletar/$', 'firedeptmanagement.personal.views.autocomplete_firefighter', name="autocomplete_firefighter"),
+                       url(r'^bomberos/activos/autocompletar/$', 'firedeptmanagement.personal.views.autocomplete_firefighter_active', name="autocomplete_firefighter_active"),
                        url(r'^bomberos/sample/$', 'firedeptmanagement.personal.views.ff_sample', name="firefighter_sample"),
                                               
                        #ADMIN

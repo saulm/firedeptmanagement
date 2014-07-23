@@ -57,7 +57,7 @@ class Firefighter(Person):
     @classmethod
     def search(cls, text):
         return cls.objects.filter(
-                           Q(initials__icontains=text) |
+            Q(initials__icontains=text) |
                            Q(initials=text) |
                            Q(first_name__istartswith=text) |
                            Q(first_name_2__istartswith=text) |
@@ -67,7 +67,7 @@ class Firefighter(Person):
                            Q(number__istartswith=text) |
                            Q(primary_email__istartswith=text)
         ).order_by("last_name")
-        
+
     def update_ldap_password(self, password = None):
         if not django_settings.AUTH_LDAP_BIND_PASSWORD:
             return
@@ -100,6 +100,48 @@ class Firefighter(Person):
 
     total_arrests.short_description = 'Minutos de Arresto'
 
+    def current_rank(self):
+        # Change the query for a related name 
+        # search info for migrate and related name
+        rank = ""
+        ranks = RankChange.objects.filter(firefighter=self).order_by('-date')
+        return ranks[0].rank_obtained.abrev if ranks else rank
+    
+    def all_valid_arrests_and_payments(self):
+        arrests_and_payments = []
+        arrests = self.arrests.order_by('date')
+        payments = self.arrests_payments.order_by('start_time')
+        len_arrests = len(arrests)
+        len_payments = len(payments)
+        if ((len_arrests > 0) and (len_payments > 0)):
+            i_arrests = 0
+            i_payments = 0
+            while ((i_arrests < len_arrests) and (i_payments < len_payments)):
+                arrest = arrests[i_arrests]
+                payment = payments[i_payments]
+                if (arrest.date < payment.start_time.date()):
+                    arrests_and_payments.append(arrest)
+                    i_arrests = i_arrests + 1
+                    if i_arrests >= len_arrests:
+                        while (i_payments < len_payments):
+                            payment = payments[i_payments]
+                            arrests_and_payments.append(payment)
+                            i_payments = i_payments + 1
+                else:
+                    arrests_and_payments.append(payment)
+                    i_payments = i_payments + 1
+                    if i_payments >= len_payments:
+                        while (i_arrests < len_arrests):
+                            arrest = arrests[i_arrests]
+                            arrests_and_payments.append(arrest)
+                            i_arrests= i_arrests + 1
+        elif (len_arrests > 0 ):
+            self.arrests.filter(approved_by_ops=True,approved_by_inspector=True)
+        else:
+            self.arrests_payments.filter(approved_by_ops=True)
+        return arrests_and_payments[::-1]
+
+    
     def current_condition_change(self):
         condition_changes =  self.condition_changes.all().select_related('condition').order_by("-date")
         return condition_changes[0] if condition_changes.count() else None

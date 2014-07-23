@@ -19,7 +19,7 @@ def user_profile(request, ff_id=None):
         firefighter = request.user.get_profile()
 
     params["firefighter"] = firefighter
-    return render_to_response("perfil.html", RequestContext(request, params))
+    return render_to_response("profile.html", RequestContext(request, params))
 
 
 @login_required
@@ -88,6 +88,11 @@ def autocomplete_firefighter(request):
     term = request.GET.get("term", "")
     ffs = Firefighter.search(term)
     return HttpResponse(json.dumps([get_values(x) for x in ffs]))
+
+def autocomplete_firefighter_active(request):
+    term = request.GET.get("term", "")
+    ffs = Firefighter.search(term)
+    return HttpResponse(json.dumps([get_values(x) for x in ffs if x.user.is_active]))
 
 def ff_sample(request):
     ffs =  [x for x in Firefighter.objects.all() if x.is_active()  and x.profile_picture and x.number][:24]

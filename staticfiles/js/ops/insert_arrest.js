@@ -1,4 +1,4 @@
-function insert_arrest_ready(){
+function insert_arrest_ready(settings){
     var ff_autocomplete_url = settings["ff_autocomplete_url"];
 	$("input.datePicker").datepicker({"maxDate": 0});
 	$("input[name$='arrested_select']").autocomplete({

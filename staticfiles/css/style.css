@@ -344,3 +344,19 @@ div.required{
 div.service_crew {
 	border:1px solid black;	
 }
+
+/* To Solve Pagination on Footer */
+.pagination {
+  height: auto !important;
+}
+
+/* To show the arrests & payments with colors */
+.red {
+  color: red;
+  font-weight:bold;
+}
+
+.green {
+  color: green;
+  font-weight:bold;
+}

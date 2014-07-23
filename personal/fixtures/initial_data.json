@@ -1,18 +1,1 @@
-[ 
-{"pk": 1, "model": "personal.rank", "fields": {"name": "Bombero", "type": "Tropa", "abrev": "Bro."}}, 
-{"pk": 2, "model": "personal.rank", "fields": {"name": "Distinguido", "type": "Clase", "abrev": "Dgdo."}}, 
-{"pk": 3, "model": "personal.rank", "fields": {"name": "Cabo Segundo", "type": "Clase", "abrev": "C/2"}},
-{"pk": 4, "model": "personal.rank", "fields": {"name": "Cabo Primero", "type": "Clase", "abrev": "C/1"}},
-{"pk": 5, "model": "personal.rank", "fields": {"name": "Sargento Segundo", "type": "Suboficial", "abrev": "S/2"}},
-{"pk": 6, "model": "personal.rank", "fields": {"name": "Sargento Primero", "type": "Suboficial", "abrev": "S/1"}},
-{"pk": 7, "model": "personal.rank", "fields": {"name": "Sargento Ayudante", "type": "Suboficial", "abrev": "S/Ay"}},
-{"pk": 8, "model": "personal.rank", "fields": {"name": "Subteniente", "type": "Oficial Subalterno", "abrev": "Stte."}},
-{"pk": 9, "model": "personal.rank", "fields": {"name": "Teniente", "type": "Oficial Subalterno", "abrev": "Tte."}},
-{"pk": 10, "model": "personal.rank", "fields": {"name": "Capitan", "type": "Oficial Subalterno", "abrev": "Cap."}},
-{"pk": 11, "model": "personal.rank", "fields": {"name": "Mayor", "type": "Oficial Superior", "abrev": "May."}},
-{"pk": 12, "model": "personal.rank", "fields": {"name": "Teniente Coronel", "type": "Oficial Superior", "abrev": "Tte Cnel."}},
-{"pk": 13, "model": "personal.rank", "fields": {"name": "Coronel", "type": "Oficial Superior", "abrev": "Cnel."}},
-{"pk": 14, "model": "personal.rank", "fields": {"name": "Comandante General", "type": "Oficial Superior", "abrev": "Cmdte."}},
-{"pk": 100, "model": "personal.rank", "fields": {"name": "Alumno", "type": "Alumno", "abrev": "Amno."}}
-
-]
+[{"pk": 1, "model": "personal.rank", "fields": {"abrev": "Bro.", "type": "Tropa", "name": "Bombero"}}, {"pk": 2, "model": "personal.rank", "fields": {"abrev": "Dgdo.", "type": "Clase", "name": "Distinguido"}}, {"pk": 3, "model": "personal.rank", "fields": {"abrev": "C/2", "type": "Clase", "name": "Cabo Segundo"}}, {"pk": 4, "model": "personal.rank", "fields": {"abrev": "C/1", "type": "Clase", "name": "Cabo Primero"}}, {"pk": 5, "model": "personal.rank", "fields": {"abrev": "S/2", "type": "Suboficial", "name": "Sargento Segundo"}}, {"pk": 6, "model": "personal.rank", "fields": {"abrev": "S/1", "type": "Suboficial", "name": "Sargento Primero"}}, {"pk": 7, "model": "personal.rank", "fields": {"abrev": "S/Ay", "type": "Suboficial", "name": "Sargento Ayudante"}}, {"pk": 8, "model": "personal.rank", "fields": {"abrev": "Stte.", "type": "Oficial Subalterno", "name": "Subteniente"}}, {"pk": 9, "model": "personal.rank", "fields": {"abrev": "Tte.", "type": "Oficial Subalterno", "name": "Teniente"}}, {"pk": 10, "model": "personal.rank", "fields": {"abrev": "Cap.", "type": "Oficial Subalterno", "name": "Capitan"}}, {"pk": 11, "model": "personal.rank", "fields": {"abrev": "May.", "type": "Oficial Superior", "name": "Mayor"}}, {"pk": 12, "model": "personal.rank", "fields": {"abrev": "Tte Cnel.", "type": "Oficial Superior", "name": "Teniente Coronel"}}, {"pk": 13, "model": "personal.rank", "fields": {"abrev": "Cnel.", "type": "Oficial Superior", "name": "Coronel"}}, {"pk": 14, "model": "personal.rank", "fields": {"abrev": "Cmdte.", "type": "Oficial Superior", "name": "Comandante General"}}, {"pk": 100, "model": "personal.rank", "fields": {"abrev": "Amno.", "type": "Alumno", "name": "Alumno"}}, {"pk": 101, "model": "personal.rank", "fields": {"abrev": "Aspirante", "type": "Aspirante", "name": "Aspirante"}}]
