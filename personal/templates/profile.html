@@ -30,7 +30,7 @@
 			<div class="span6">
 				<h3>Datos Básicos</h3>
 				<ul >
-					<li>Cedula: <strong>{{firefighter.id_document|default_if_none:"" }}</strong></li>
+					<li>C&eacute;dula: <strong>{{firefighter.id_document|default_if_none:"" }}</strong></li>
 					<li>Fecha de Nacimiento: <strong>{{firefighter.birth_date|date:"d N"|default_if_none:"" }}</strong></li>
 					<li>Sexo: <strong>{{firefighter.gender|default_if_none:"" }}</strong></li>
 					{%if firefighter.blood_type and firefighter.blood_type_rh%}<li>Sangre: <strong>Factor {{firefighter.blood_type}} Rh {{firefighter.blood_type_rh}}</strong></li>{%endif%}
@@ -123,7 +123,7 @@
             {% if element.approved_by_ops %}
             <li>Estado: <strong>Aprobado</strong></li>
             {% else %}
-            <li>Estado: <strong>Sin aprobar</strong></li>
+            <li>Estado: <strong>Este pago de arresto ha sido anulado</strong></li>
             {% endif %}
             {% endif %}
           </ul>

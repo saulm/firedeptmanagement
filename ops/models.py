@@ -203,7 +203,7 @@ class ArrestPayment(models.Model):
     start_time = models.DateTimeField(verbose_name=u"Fecha/Hora de inicio")
     end_time = models.DateTimeField(verbose_name=u"Fecha/Hora de fin")
     minutes = models.IntegerField(verbose_name=u'Minutos', validators=[MinValueValidator(0)], editable=False)
-    approved_by_ops = models.BooleanField(default=False, verbose_name=u"Aprobado por Operaciones")
+    approved_by_ops = models.BooleanField(default=True, verbose_name=u"Aprobado por Operaciones")
     
     def save(self, *args, **kwargs):
         delta = self.end_time - self.start_time
