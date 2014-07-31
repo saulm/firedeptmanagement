@@ -163,15 +163,15 @@ class Arrest(models.Model):
         verbose_name_plural = u"Arrestos"
 
     creation_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(Firefighter, related_name='arrests_created', editable=False, null=True, blank=True)
+    created_by = models.ForeignKey(Firefighter, related_name='arrests_created', editable=False, null=True, blank=True, verbose_name='Agregado por')
     arrested = models.ForeignKey(Firefighter, related_name="arrests", verbose_name=u"Arrestado", null=True, blank=True)
     date = models.DateField(verbose_name=u"Fecha")
     description = models.TextField(verbose_name=u"Descripción")
     was_notified = models.BooleanField(default=False, verbose_name=u"Notificó")
     time = models.IntegerField(verbose_name=u'Minutos de ausencia', validators=[MinValueValidator(0)])
     minutes = models.IntegerField(verbose_name=u'Minutos de arresto', editable=False, validators=[MinValueValidator(0)])
-    approved_by_ops = models.BooleanField(default=False, verbose_name=u"Aprobado por Operaciones")
-    approved_by_inspector = models.BooleanField(default=False, verbose_name=u"Aprobado por el Inspector")
+    approved_by_ops = models.BooleanField(default=True, verbose_name=u"Aprobado por Operaciones")
+    approved_by_inspector = models.BooleanField(default=True, verbose_name=u"Aprobado por el Inspector")
 
     def save(self, *args, **kwargs):
         self.minutes = self.time*1.5 if self.was_notified else self.time*2
@@ -198,12 +198,12 @@ class ArrestPayment(models.Model):
         verbose_name_plural = u"Pagos de Arresto"
 
     creation_date = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(Firefighter, related_name=u'arrest_payments_created', editable=False, null=True, blank=True)
+    created_by = models.ForeignKey(Firefighter, related_name=u'arrest_payments_created', editable=False, null=True, blank=True, verbose_name='Agregado por')
     payer = models.ForeignKey(Firefighter, related_name=u"arrests_payments", verbose_name=u"Persona que paga el arresto", null=True, blank=True)
     start_time = models.DateTimeField(verbose_name=u"Fecha/Hora de inicio")
     end_time = models.DateTimeField(verbose_name=u"Fecha/Hora de fin")
     minutes = models.IntegerField(verbose_name=u'Minutos', validators=[MinValueValidator(0)], editable=False)
-    approved_by_ops = models.BooleanField(default=False, verbose_name=u"Aprobado por Operaciones")
+    approved_by_ops = models.BooleanField(default=True, verbose_name=u"Aprobado por Operaciones")
     
     def save(self, *args, **kwargs):
         delta = self.end_time - self.start_time

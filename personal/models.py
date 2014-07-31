@@ -15,6 +15,7 @@ from local_settings import send_welcome_email
 from local_settings import send_webmaster_email
 from django.conf import settings
 from datetime import date
+from itertools import chain
 import unidecode
 
 class Rank(models.Model):
@@ -57,7 +58,7 @@ class Firefighter(Person):
     @classmethod
     def search(cls, text):
         return cls.objects.filter(
-                           Q(initials__icontains=text) |
+            Q(initials__icontains=text) |
                            Q(initials=text) |
                            Q(first_name__istartswith=text) |
                            Q(first_name_2__istartswith=text) |
@@ -67,7 +68,7 @@ class Firefighter(Person):
                            Q(number__istartswith=text) |
                            Q(primary_email__istartswith=text)
         ).order_by("last_name")
-        
+
     def update_ldap_password(self, password = None):
         if not django_settings.AUTH_LDAP_BIND_PASSWORD:
             return
@@ -100,6 +101,21 @@ class Firefighter(Person):
 
     total_arrests.short_description = 'Minutos de Arresto'
 
+    def current_rank(self):
+        # Change the query for a related name 
+        # search info for migrate and related name
+        rank = ""
+        ranks = RankChange.objects.filter(firefighter=self).order_by('-date')
+        return ranks[0].rank_obtained.abrev if ranks else rank
+    
+    def arrests_and_payments(self):
+        from ops.models import Arrest
+        arrests = self.arrests.order_by('date')
+        payments = self.arrests_payments.order_by('start_time')
+        arrests_and_payments = list(chain(arrests,payments))
+        arrests_and_payments = sorted(arrests_and_payments, key = lambda element: element.date if (element.__class__ == Arrest) else element.start_time.date())
+        return arrests_and_payments[::-1]
+    
     def current_condition_change(self):
         condition_changes =  self.condition_changes.all().select_related('condition').order_by("-date")
         return condition_changes[0] if condition_changes.count() else None
