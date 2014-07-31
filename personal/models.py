@@ -15,6 +15,7 @@ from local_settings import send_welcome_email
 from local_settings import send_webmaster_email
 from django.conf import settings
 from datetime import date
+from itertools import chain
 import unidecode
 
 class Rank(models.Model):
@@ -108,11 +109,11 @@ class Firefighter(Person):
         return ranks[0].rank_obtained.abrev if ranks else rank
     
     def arrests_and_payments(self):
+        from ops.models import Arrest
         arrests = self.arrests.order_by('date')
         payments = self.arrests_payments.order_by('start_time')
-        from heapq import merge
-        arrests_and_payments = list(merge(arrests,payments))
-        arrests_and_payments = sorted(arrests_and_payments, key = lambda element: element.date if (element.type() == 'arrest') else element.start_time.date())
+        arrests_and_payments = list(chain(arrests,payments))
+        arrests_and_payments = sorted(arrests_and_payments, key = lambda element: element.date if (element.__class__ == Arrest) else element.start_time.date())
         return arrests_and_payments[::-1]
     
     def current_condition_change(self):
