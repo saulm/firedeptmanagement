@@ -179,6 +179,8 @@ class Arrest(models.Model):
         
     def __unicode__(self):
         return u"%s %s %s" % (unicode(self.date), unicode(self.minutes), unicode(self.arrested))
+    def type(self):
+        return "arrest"
 
 @receiver(post_save, sender=Arrest)
 def notify_arrested(sender, instance, created, **kwargs):
@@ -221,6 +223,9 @@ class ArrestPayment(models.Model):
     
     def __unicode__(self):
         return u"%s %s %s" % (unicode(self.start_time),  unicode(self.minutes), unicode(self.payer))
+
+    def type(self):
+        return "arrest_payment"
 
 @receiver(post_save, sender=ArrestPayment)
 def notify_arrest_payment(sender, instance, created, **kwargs):

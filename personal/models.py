@@ -107,40 +107,13 @@ class Firefighter(Person):
         ranks = RankChange.objects.filter(firefighter=self).order_by('-date')
         return ranks[0].rank_obtained.abrev if ranks else rank
     
-    def all_valid_arrests_and_payments(self):
-        arrests_and_payments = []
+    def arrests_and_payments(self):
         arrests = self.arrests.order_by('date')
         payments = self.arrests_payments.order_by('start_time')
-        len_arrests = len(arrests)
-        len_payments = len(payments)
-        if ((len_arrests > 0) and (len_payments > 0)):
-            i_arrests = 0
-            i_payments = 0
-            while ((i_arrests < len_arrests) and (i_payments < len_payments)):
-                arrest = arrests[i_arrests]
-                payment = payments[i_payments]
-                if (arrest.date < payment.start_time.date()):
-                    arrests_and_payments.append(arrest)
-                    i_arrests = i_arrests + 1
-                    if i_arrests >= len_arrests:
-                        while (i_payments < len_payments):
-                            payment = payments[i_payments]
-                            arrests_and_payments.append(payment)
-                            i_payments = i_payments + 1
-                else:
-                    arrests_and_payments.append(payment)
-                    i_payments = i_payments + 1
-                    if i_payments >= len_payments:
-                        while (i_arrests < len_arrests):
-                            arrest = arrests[i_arrests]
-                            arrests_and_payments.append(arrest)
-                            i_arrests= i_arrests + 1
-        elif (len_arrests > 0 ):
-            self.arrests.filter(approved_by_ops=True,approved_by_inspector=True)
-        else:
-            self.arrests_payments.filter(approved_by_ops=True)
+        from heapq import merge
+        arrests_and_payments = list(merge(arrests,payments))
+        arrests_and_payments = sorted(arrests_and_payments, key = lambda element: element.date if (element.type() == 'arrest') else element.start_time.date())
         return arrests_and_payments[::-1]
-
     
     def current_condition_change(self):
         condition_changes =  self.condition_changes.all().select_related('condition').order_by("-date")

@@ -4,99 +4,100 @@
 <ul class="nav nav-tabs">
   <li class="active"><a href="#info" data-toggle="tab">Datos Básicos</a></li>
   <li><a href="#services" data-toggle="tab">Servicios</a></li>
-	{%if user.get_profile.id == firefighter.id %}
+  {%if user.get_profile.id == firefighter.id %}
   <li><a href="#arrests" data-toggle="tab">Arrestos</a></li>
-	{%endif%}
+  {%endif%}
 </ul>
 <div class="tab-content">
-	<div  class="tab-pane active" id="info">
+  <div  class="tab-pane active" id="info">
 
-		<div class="row">
-			<div class="span2">
-				{%if firefighter.picture%}
-					{% thumbnail firefighter.picture "100x100" crop="center" format="PNG"   as im %}
-						<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
-					{% endthumbnail %}
-				{%endif%}
-			</div>
-			<div class="span6">
-			<h1>
-				{{firefighter.current_rank}} {{firefighter.first_name}} {{firefighter.first_name_2}} {{firefighter.last_name}} {{firefighter.last_name_2}}
-			</h1>
-			{%if firefighter.initials %}<h2>{{firefighter.initials}} #{{firefighter.number|default_if_none:""}} </h2>{%endif%}
-			</div>
-		</div>
-		<div class="row">
-			<div class="span6">
-				<h3>Datos Básicos</h3>
-				<ul >
-					<li>C&eacute;dula: <strong>{{firefighter.id_document|default_if_none:"" }}</strong></li>
-					<li>Fecha de Nacimiento: <strong>{{firefighter.birth_date|date:"d N"|default_if_none:"" }}</strong></li>
-					<li>Sexo: <strong>{{firefighter.gender|default_if_none:"" }}</strong></li>
-					{%if firefighter.blood_type and firefighter.blood_type_rh%}<li>Sangre: <strong>Factor {{firefighter.blood_type}} Rh {{firefighter.blood_type_rh}}</strong></li>{%endif%}
-				</ul>
-				
-			</div>
-			<div class="span6">
-				<h3>Datos de Contacto:</h3>
-				<ul>
-					{%for phone in firefighter.persontelephonenumber_set.all %}
-						<li>{{phone}}</li>
-					{%endfor%}
-					
-					<li>Email: {{firefighter.primary_email}}</li>
-					<li>Email: {{firefighter.alternate_email}}</li>
-				</ul>
-			</div>
-		</div>
-		
-		<div class="row">
-			<div class="span6">
-				<h3>Condición</h3>
-				{% with condition=firefighter.current_condition_change %}
-					{%if condition%}
-						<p>Actualmente es <b>{{condition.condition}}</b>, </p>
-						{%if condition.link_to_doc%}
-							<p>Publicado en <a target="_blank" href="{{condition.link_to_doc}}">{{condition.link_to_doc|truncatechars:40 }}</a></p>
-						{%endif%}
-					{%else%}
-						<p>No hay información de la condición actual.</p>
-					{%endif%}
-				{% endwith %}
-			</div>
-			
-			<div class="span6">
-				<h3>Vacaciones</h3>
-				{%if firefighter.is_on_vacation%}
-					{% with vacation=firefighter.current_vacation %}
-						<p>Actualmente está de vacaciones, hasta el {{vacation.end_at}}</p>
-						{%if vacation.link_to_doc%}
-							<p>Publicado en <a target="_blank" href="{{vacation.link_to_doc}}">{{vacation.link_to_doc|truncatechars:40 }}</a></p>
-						{%endif%}	
-					{% endwith %}
-				{%else%}
-					<p>
-						Actualmente no se encuentra de vacaciones.
-					</p>
-				{%endif%}
-			</div>
-		</div>				
-		
-	</div>
-		{%if user.get_profile.id == firefighter.id %}
-	<div  class="tab-pane" id="arrests">
+    <div class="row">
+      <div class="span2">
+	{%if firefighter.picture%}
+	{% thumbnail firefighter.picture "100x100" crop="center" format="PNG"   as im %}
+	<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
+	{% endthumbnail %}
+	{%endif%}
+      </div>
+      <div class="span6">
+	<h1>
+	  {{firefighter.current_rank}} {{firefighter.first_name}} {{firefighter.first_name_2}} {{firefighter.last_name}} {{firefighter.last_name_2}}
+	</h1>
+	{%if firefighter.initials %}<h2>{{firefighter.initials}} #{{firefighter.number|default_if_none:""}} </h2>{%endif%}
+      </div>
+    </div>
+    <div class="row">
+      <div class="span6">
+	<h3>Datos B@aacute;sicos</h3>
+	<ul >
+	  <li>C&eacute;dula: <strong>{{firefighter.id_document|default_if_none:"" }}</strong></li>
+	  <li>Fecha de Nacimiento: <strong>{{firefighter.birth_date|date:"d N"|default_if_none:"" }}</strong></li>
+	  <li>Sexo: <strong>{{firefighter.gender|default_if_none:"" }}</strong></li>
+	  {%if firefighter.blood_type and firefighter.blood_type_rh%}<li>Sangre: <strong>Factor {{firefighter.blood_type}} Rh {{firefighter.blood_type_rh}}</strong></li>{%endif%}
+	</ul>
+	
+      </div>
+      <div class="span6">
+	<h3>Datos de Contacto:</h3>
+	<ul>
+	  {%for phone in firefighter.persontelephonenumber_set.all %}
+	  <li>{{phone}}</li>
+	  {%endfor%}
+	  
+	  <li>Email: {{firefighter.primary_email}}</li>
+	  <li>Email: {{firefighter.alternate_email}}</li>
+	</ul>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="span6">
+	<h3>Condición</h3>
+	{% with condition=firefighter.current_condition_change %}
+	{%if condition%}
+	<p>Actualmente es <b>{{condition.condition}}</b>, </p>
+	{%if condition.link_to_doc%}
+	<p>Publicado en <a target="_blank" href="{{condition.link_to_doc}}">{{condition.link_to_doc|truncatechars:40 }}</a></p>
+	{%endif%}
+	{%else%}
+	<p>No hay información de la condición actual.</p>
+	{%endif%}
+	{% endwith %}
+      </div>
+      
+      <div class="span6">
+	<h3>Vacaciones</h3>
+	{%if firefighter.is_on_vacation%}
+	{% with vacation=firefighter.current_vacation %}
+	<p>Actualmente está de vacaciones, hasta el {{vacation.end_at}}</p>
+	{%if vacation.link_to_doc%}
+	<p>Publicado en <a target="_blank" href="{{vacation.link_to_doc}}">{{vacation.link_to_doc|truncatechars:40 }}</a></p>
+	{%endif%}	
+	{% endwith %}
+	{%else%}
+	<p>
+	  Actualmente no se encuentra de vacaciones.
+	</p>
+	{%endif%}
+      </div>
+    </div>				
+    
+  </div>
+  {%if user.get_profile.id == firefighter.id %}
+  <div  class="tab-pane" id="arrests">
     <h3>Resumen</h3>
-		<p>Debes <strong>{{firefighter.total_arrests}}</strong> minutos de arresto</p>
-    {% if firefighter.all_valid_arrests_and_payments %}
+    <p>Debes <strong>{{firefighter.total_arrests}}</strong> minutos de arresto</p>
+    {% if firefighter.arrests_and_payments %}
+    Holla
     <table class="table">
       <tr>
         <th>Fecha</th>
         <th>Tiempo</th> 
       </tr>
-      {% for element in firefighter.all_valid_arrests_and_payments %}
+      {% for element in firefighter.arrests_and_payments %}
       <tr id="preview_{{forloop.counter}}" class="preview">
         <td>
-{{element.date}} {{element.start_time.date}}</td>
+	  {{element.date}} {{element.start_time.date}}</td>
         <td {% if element.approved_by_ops %}class="{% if element.date %}red{%else%}green{%endif%}"{%endif%}>
           {% if element.approved_by_ops%} {%if element.date %}+{%else%}-{%endif%} {% endif %} {{element.minutes}} minutos</td>
       </tr>
@@ -129,180 +130,180 @@
           </ul>
         </td>
       </tr>
-    {% endfor %}
+      {% endfor %}
     </table>
     {% endif %}
   </div>
-	{%endif%}
-	<div class="tab-pane" id="services">
-		<div class="row">
-			{%if firefighter.services_lead.count %}
-				<div class="span12">
-					<h3>Servicios en los que ha sido jefe: ({{firefighter.services_lead.count}})</h3>
-          <table class="table table-striped">
-            <tr>
-              <th>#</th>
-              <th>Fecha</th>
-              <th>Hora</th>
-              <th>Tipo</th>
-              <th>Descripci&oacute;n</th>
-              <th>Comisiones</th>
-            </tr>
+  {%endif%}
+  <div class="tab-pane" id="services">
+    <div class="row">
+      {%if firefighter.services_lead.count %}
+      <div class="span12">
+	<h3>Servicios en los que ha sido jefe: ({{firefighter.services_lead.count}})</h3>
+        <table class="table table-striped">
+          <tr>
+            <th>#</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Tipo</th>
+            <th>Descripci&oacute;n</th>
+            <th>Comisiones</th>
+          </tr>
 
-					{%for service_v in firefighter.services_lead.all %}
-            <tr>
-              <td><a href="{% url 'view_service' service_id=service_v.service.id%}">#{{service_v.service.id}}</a></td>
-              <td><a href="{% url 'view_service' service_id=service_v.service.id%}">{{service_v.service.date|date:"d/m/y"}}</a></td>
-              <td><a href="{% url 'view_service' service_id=service_v.service.id%}">{{service_v.service.time|date:"Hi"}}</a></td>
-              <td>{{service_v.service.service_type}}</td>
-              <td>{{service_v.service.description|truncatewords:50}}</td>
-              <td>
-						{% for vehicle in service_v.service.vehicles.all %}
-							<div>
-								{{vehicle.vehicle.name}}
-								<a href="{% url 'perfil_f' ff_id=vehicle.lead.id %}">
-									{%if vehicle.lead.picture%}
-										{% thumbnail vehicle.lead.picture "35x35" crop="center" format="PNG"   as im %}
-											<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
-										{% endthumbnail %}
-									{%else%}
-										{{lead.initials}}
-									{%endif%}
-								</a>
-								{%for crew_member in vehicle.crew.all%}
-									<a href="{% url 'perfil_f' ff_id=crew_member.id %}">
-										{%if crew_member.picture%}
-											{% thumbnail crew_member.picture "35x35" crop="center" format="PNG"   as im %}
-												<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
-											{% endthumbnail %}
-										{%else%}
-											{{crew_member.initials}}
-										{%endif%}
-									</a>
-								{% endfor %}
-							</div>		
-						{% endfor %}
-              </td>
-            </tr>
-					  {%endfor%}
-          </table>
-          
-				</div>
-			  {%endif%}
-			
-			{%if firefighter.services_drove.count %}
-				<div class="span12">
-					<h3>Servicios en los que ha sido conductor: ({{firefighter.services_drove.count}})</h3>
+	  {%for service_v in firefighter.services_lead.all %}
+          <tr>
+            <td><a href="{% url 'view_service' service_id=service_v.service.id%}">#{{service_v.service.id}}</a></td>
+            <td><a href="{% url 'view_service' service_id=service_v.service.id%}">{{service_v.service.date|date:"d/m/y"}}</a></td>
+            <td><a href="{% url 'view_service' service_id=service_v.service.id%}">{{service_v.service.time|date:"Hi"}}</a></td>
+            <td>{{service_v.service.service_type}}</td>
+            <td>{{service_v.service.description|truncatewords:50}}</td>
+            <td>
+	      {% for vehicle in service_v.service.vehicles.all %}
+	      <div>
+		{{vehicle.vehicle.name}}
+		<a href="{% url 'perfil_f' ff_id=vehicle.lead.id %}">
+		  {%if vehicle.lead.picture%}
+		  {% thumbnail vehicle.lead.picture "35x35" crop="center" format="PNG"   as im %}
+		  <img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
+		  {% endthumbnail %}
+		  {%else%}
+		  {{lead.initials}}
+		  {%endif%}
+		</a>
+		{%for crew_member in vehicle.crew.all%}
+		<a href="{% url 'perfil_f' ff_id=crew_member.id %}">
+		  {%if crew_member.picture%}
+		  {% thumbnail crew_member.picture "35x35" crop="center" format="PNG"   as im %}
+		  <img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
+		  {% endthumbnail %}
+		  {%else%}
+		  {{crew_member.initials}}
+		  {%endif%}
+		</a>
+		{% endfor %}
+	      </div>		
+	      {% endfor %}
+            </td>
+          </tr>
+	  {%endfor%}
+        </table>
+        
+      </div>
+      {%endif%}
+      
+      {%if firefighter.services_drove.count %}
+      <div class="span12">
+	<h3>Servicios en los que ha sido conductor: ({{firefighter.services_drove.count}})</h3>
 
-          <table class="table table-striped">
-            <tr>
-              <th>#</th>
-              <th>Fecha</th>
-              <th>Hora</th>
-              <th>Tipo</th>
-              <th>Descripci&oacute;n</th>
-              <th>Comisiones</th>
-            </tr>
+        <table class="table table-striped">
+          <tr>
+            <th>#</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Tipo</th>
+            <th>Descripci&oacute;n</th>
+            <th>Comisiones</th>
+          </tr>
 
-					{%for service_v in firefighter.services_drove.all %}
-            <tr>
-              <td><a href="{% url 'view_service' service_id=service_v.service.id%}">#{{service_v.service.id}}</a></td>
-              <td><a href="{% url 'view_service' service_id=service_v.service.id%}">{{service_v.service.date|date:"d/m/y"}}</a></td>
-              <td><a href="{% url 'view_service' service_id=service_v.service.id%}">{{service_v.service.time|date:"Hi"}}</a></td>
-              <td>{{service_v.service.service_type}}</td>
-              <td>{{service_v.service.description|truncatewords:50}}</td>
-              <td>
-						{% for vehicle in service_v.service.vehicles.all %}
-							<div>
-								{{vehicle.vehicle.name}}
-								<a href="{% url 'perfil_f' ff_id=vehicle.lead.id %}">
-									{%if vehicle.lead.picture%}
-										{% thumbnail vehicle.lead.picture "35x35" crop="center" format="PNG"   as im %}
-											<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
-										{% endthumbnail %}
-									{%else%}
-										{{lead.initials}}
-									{%endif%}
-								</a>
-								{%for crew_member in vehicle.crew.all%}
-									<a href="{% url 'perfil_f' ff_id=crew_member.id %}">
-										{%if crew_member.picture%}
-											{% thumbnail crew_member.picture "35x35" crop="center" format="PNG"   as im %}
-												<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
-											{% endthumbnail %}
-										{%else%}
-											{{crew_member.initials}}
-										{%endif%}
-									</a>
-								{% endfor %}
-							</div>		
-						{% endfor %}
-              </td>
-            </tr>
-					  {%endfor%}
-          </table>
-				</div>
-			{%endif%}
-			
-			{%if firefighter.in_services.count %}
-				<div class="span12">
-					<h3>Servicios en los que ha sido parte de una comisión: ({{firefighter.in_services.count}})</h3>
-          <table class="table table-striped">
-            <tr>
-              <th>#</th>
-              <th>Fecha</th>
-              <th>Hora</th>
-              <th>Tipo</th>
-              <th>Descripci&oacute;n</th>
-              <th>Comisiones</th>
-            </tr>
+	  {%for service_v in firefighter.services_drove.all %}
+          <tr>
+            <td><a href="{% url 'view_service' service_id=service_v.service.id%}">#{{service_v.service.id}}</a></td>
+            <td><a href="{% url 'view_service' service_id=service_v.service.id%}">{{service_v.service.date|date:"d/m/y"}}</a></td>
+            <td><a href="{% url 'view_service' service_id=service_v.service.id%}">{{service_v.service.time|date:"Hi"}}</a></td>
+            <td>{{service_v.service.service_type}}</td>
+            <td>{{service_v.service.description|truncatewords:50}}</td>
+            <td>
+	      {% for vehicle in service_v.service.vehicles.all %}
+	      <div>
+		{{vehicle.vehicle.name}}
+		<a href="{% url 'perfil_f' ff_id=vehicle.lead.id %}">
+		  {%if vehicle.lead.picture%}
+		  {% thumbnail vehicle.lead.picture "35x35" crop="center" format="PNG"   as im %}
+		  <img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
+		  {% endthumbnail %}
+		  {%else%}
+		  {{lead.initials}}
+		  {%endif%}
+		</a>
+		{%for crew_member in vehicle.crew.all%}
+		<a href="{% url 'perfil_f' ff_id=crew_member.id %}">
+		  {%if crew_member.picture%}
+		  {% thumbnail crew_member.picture "35x35" crop="center" format="PNG"   as im %}
+		  <img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
+		  {% endthumbnail %}
+		  {%else%}
+		  {{crew_member.initials}}
+		  {%endif%}
+		</a>
+		{% endfor %}
+	      </div>		
+	      {% endfor %}
+            </td>
+          </tr>
+	  {%endfor%}
+        </table>
+      </div>
+      {%endif%}
+      
+      {%if firefighter.in_services.count %}
+      <div class="span12">
+	<h3>Servicios en los que ha sido parte de una comisión: ({{firefighter.in_services.count}})</h3>
+        <table class="table table-striped">
+          <tr>
+            <th>#</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Tipo</th>
+            <th>Descripci&oacute;n</th>
+            <th>Comisiones</th>
+          </tr>
 
-					{%for service_v in firefighter.in_services.all %}
-            <tr>
-              <td><a href="{% url 'view_service' service_id=service_v.service.id%}">#{{service_v.service.id}}</a></td>
-              <td><a href="{% url 'view_service' service_id=service_v.service.id%}">{{service_v.service.date|date:"d/m/y"}}</a></td>
-              <td><a href="{% url 'view_service' service_id=service_v.service.id%}">{{service_v.service.time|date:"Hi"}}</a></td>
-              <td>{{service_v.service.service_type}}</td>
-              <td>{{service_v.service.description|truncatewords:50}}</td>
-              <td>
-						{% for vehicle in service_v.service.vehicles.all %}
-							<div>
-								{{vehicle.vehicle.name}}
-								<a href="{% url 'perfil_f' ff_id=vehicle.lead.id %}">
-									{%if vehicle.lead.picture%}
-										{% thumbnail vehicle.lead.picture "35x35" crop="center" format="PNG"   as im %}
-											<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
-										{% endthumbnail %}
-									{%else%}
-										{{lead.initials}}
-									{%endif%}
-								</a>
-								{%for crew_member in vehicle.crew.all%}
-									<a href="{% url 'perfil_f' ff_id=crew_member.id %}">
-										{%if crew_member.picture%}
-											{% thumbnail crew_member.picture "35x35" crop="center" format="PNG"   as im %}
-												<img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
-											{% endthumbnail %}
-										{%else%}
-											{{crew_member.initials}}
-										{%endif%}
-									</a>
-								{% endfor %}
-							</div>		
-						{% endfor %}
-              </td>
-            </tr>
-					  {%endfor%}
-          </table>
-				</div>
-			{%endif%}
-		</div>
-	</div>
+	  {%for service_v in firefighter.in_services.all %}
+          <tr>
+            <td><a href="{% url 'view_service' service_id=service_v.service.id%}">#{{service_v.service.id}}</a></td>
+            <td><a href="{% url 'view_service' service_id=service_v.service.id%}">{{service_v.service.date|date:"d/m/y"}}</a></td>
+            <td><a href="{% url 'view_service' service_id=service_v.service.id%}">{{service_v.service.time|date:"Hi"}}</a></td>
+            <td>{{service_v.service.service_type}}</td>
+            <td>{{service_v.service.description|truncatewords:50}}</td>
+            <td>
+	      {% for vehicle in service_v.service.vehicles.all %}
+	      <div>
+		{{vehicle.vehicle.name}}
+		<a href="{% url 'perfil_f' ff_id=vehicle.lead.id %}">
+		  {%if vehicle.lead.picture%}
+		  {% thumbnail vehicle.lead.picture "35x35" crop="center" format="PNG"   as im %}
+		  <img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
+		  {% endthumbnail %}
+		  {%else%}
+		  {{lead.initials}}
+		  {%endif%}
+		</a>
+		{%for crew_member in vehicle.crew.all%}
+		<a href="{% url 'perfil_f' ff_id=crew_member.id %}">
+		  {%if crew_member.picture%}
+		  {% thumbnail crew_member.picture "35x35" crop="center" format="PNG"   as im %}
+		  <img width="{{im.width}}" height="{{im.height}}" src='{{im.url}}'></img>
+		  {% endthumbnail %}
+		  {%else%}
+		  {{crew_member.initials}}
+		  {%endif%}
+		</a>
+		{% endfor %}
+	      </div>		
+	      {% endfor %}
+            </td>
+          </tr>
+	  {%endfor%}
+        </table>
+      </div>
+      {%endif%}
+    </div>
+  </div>
 </div>
 
 {%endblock%}
 {% block scripts %}
- 	{{block.super}}
- 	<script src="{{STATIC_URL}}js/personal/profile.js"></script>
-  
+{{block.super}}
+<script src="{{STATIC_URL}}js/personal/profile.js"></script>
+
 {% endblock %}
